@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using System.Diagnostics;
+
 namespace WindowsFormsApplication2
 {
     public partial class Form1 : Form
@@ -18,9 +20,10 @@ namespace WindowsFormsApplication2
         }
         internal BraillePanel BraillePanel1 = new BraillePanel
         {
-            BackColor = Color.Black,
-            ForeColor = Color.White,
-            FontSize = 10
+            BackColor = Color.White,
+            ForeColor = Color.RoyalBlue,
+            FontSize = 48,
+            DrawBlanks = true,
         };
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -36,9 +39,11 @@ namespace WindowsFormsApplication2
             numericUpDown1.Top = this.ClientRectangle.Height - numericUpDown1.Height;
             numericUpDown1.Left = 0;
             numericUpDown1.Width = this.ClientRectangle.Width / 2;
+            numericUpDown1.Value = BraillePanel1.FontSize;
             checkBox1.Left = numericUpDown1.Left + numericUpDown1.Width + 5;
             checkBox1.Width = numericUpDown1.Width;
             checkBox1.Top = numericUpDown1.Top;
+            checkBox1.Checked = BraillePanel1.DrawBlanks;
             textBox1.Left = 0;
             textBox1.Width = this.ClientRectangle.Width;
             textBox1.Top = numericUpDown1.Top - textBox1.Height;
@@ -179,6 +184,7 @@ public class BraillePanel : Panel
         foreach (char s in text.ToLower())
         {
             string keyCode = string.Empty;
+            string morse = string.Empty;
             Bitmap bm = new Bitmap(characterWidth, characterHeight);
             Graphics g = Graphics.FromImage(bm);
             int x = 0;
@@ -190,81 +196,107 @@ public class BraillePanel : Panel
             {
                 case "a":
                     keyCode = "100000";
+                    morse = "01";
                     break;
                 case "b":
                     keyCode = "110000";
+                    morse = "1000";
                     break;
                 case "c":
                     keyCode = "100100";
+                    morse = "1010";
                     break;
                 case "d":
                     keyCode = "100110";
+                    morse = "100";
                     break;
                 case "e":
                     keyCode = "100010";
+                    morse = "0";
                     break;
                 case "f":
                     keyCode = "110100";
+                    morse = "0010";
                     break;
                 case "g":
                     keyCode = "110110";
+                    morse = "110";
                     break;
                 case "h":
                     keyCode = "110010";
+                    morse = "0000";
                     break;
                 case "i":
                     keyCode = "010100";
+                    morse = "00";
                     break;
                 case "j":
                     keyCode = "010110";
+                    morse = "0111";
                     break;
                 case "k":
                     keyCode = "101000";
+                    morse = "101";
                     break;
                 case "l":
                     keyCode = "111000";
+                    morse = "0100";
                     break;
                 case "m":
                     keyCode = "101100";
+                    morse = "11";
                     break;
                 case "n":
                     keyCode = "101110";
+                    morse = "10";
                     break;
                 case "o":
                     keyCode = "101010";
+                    morse = "111";
                     break;
                 case "p":
                     keyCode = "111100";
+                    morse = "0110";
                     break;
                 case "q":
                     keyCode = "111110";
+                    morse = "1101";
                     break;
                 case "r":
                     keyCode = "111010";
+                    morse = "010";
                     break;
                 case "s":
                     keyCode = "011100";
+                    morse = "000";
                     break;
                 case "t":
                     keyCode = "011110";
+                    morse = "1";
                     break;
                 case "u":
                     keyCode = "101001";
+                    morse = "001";
                     break;
                 case "v":
                     keyCode = "111001";
+                    morse = "0001";
                     break;
                 case "w":
                     keyCode = "010111";
+                    morse = "011";
                     break;
                 case "x":
                     keyCode = "101101";
+                    morse = "1001";
                     break;
                 case "y":
                     keyCode = "101111";
+                    morse = "1011";
                     break;
                 case "z":
                     keyCode = "101011";
+                    morse = "1100";
                     break;
                 case "1":
                     keyCode = "010000";
@@ -403,6 +435,19 @@ public class BraillePanel : Panel
                     images.Add(bm);
                     continue;
             }
+            int actualScale = 2;
+            int actualDotSize = (int)(dotSize / actualScale);
+            int actualDotLocation = (int)((dotSize - actualDotSize) / 2);
+            int blankScale = 4;
+            int blankDotSize = (int)(dotSize / blankScale);
+            int blankDotLocation = (int)((dotSize - blankDotSize) / 2);
+
+            int morsex = x - fontSize / 2;
+            int morsey = y + fontSize + fontSize / 2;
+
+            int binaryx = x - fontSize / 2;
+            int binaryy = y + (fontSize * 3);
+
             foreach (char s2 in keyCode.ToCharArray())
             {
                 y += fontSize;
@@ -413,17 +458,56 @@ public class BraillePanel : Panel
                 }
                 if (s2 == "1".ToCharArray()[0])
                 {
-                    g.FillEllipse(new SolidBrush(foreColor), new Rectangle(new Point(x + pad, y + pad), new Size(dotSize, dotSize)));
+                    g.FillEllipse(new SolidBrush(foreColor), new Rectangle(
+                        new Point(x + pad + actualDotLocation, y + pad + actualDotLocation), 
+                        new Size(actualDotSize, actualDotSize)));
                 }
                 else
                 {
                     if (drawBlanks)
                     {
-                        g.DrawEllipse(new Pen(new SolidBrush(foreColor)), new Rectangle(new Point(x + pad, y + pad), new Size(dotSize, dotSize)));
+                        //g.DrawEllipse(new Pen(new SolidBrush(foreColor)), new Rectangle(new Point(x + pad, y + pad), new Size(dotSize, dotSize)));
+                        g.FillEllipse(new SolidBrush(foreColor), new Rectangle(
+                            new Point(x + pad + blankDotLocation, y + pad + blankDotLocation), 
+                            new Size(blankDotSize, blankDotSize)));
                     }
                 }
 
             }
+
+            int morseScale = 3;
+            int morseScaleSize = (int)(dotSize / morseScale);
+            int morseScaleLocation = (int)((dotSize - morseScaleSize) / 2);
+            int morseDashWidth = morseScaleSize * 2;
+            int morseDashHeight = morseScaleSize / 2;
+            foreach (char s2 in morse.ToCharArray())
+            {
+                var morsewidth = 0;        
+                if (s2 == "0".ToCharArray()[0])
+                {                    
+                    g.FillEllipse(new SolidBrush(Color.DarkGoldenrod), new Rectangle(
+                        new Point(morsex + pad + morseScaleLocation, morsey + pad + morseScaleLocation), 
+                        new Size(morseScaleSize, morseScaleSize)));
+                    morsewidth = morseScaleSize;
+                }
+                else
+                {                    
+                    g.FillRectangle(new SolidBrush(Color.DarkGoldenrod), new Rectangle(
+                        new Point(morsex + pad + morseScaleLocation, morsey + pad + morseScaleLocation + morseDashHeight / 2), 
+                        new Size(morseDashWidth, morseDashHeight)));
+                    morsewidth = morseDashWidth;
+                }
+
+                morsex += morsewidth + morseScaleSize / 2;
+
+            }
+
+            //.PadLeft(8, '0')
+            var binary = string.Join(" ", new ASCIIEncoding().GetBytes(s3).Select(byt => Convert.ToString(byt - 32, 2)));
+            g.DrawString(binary, new Font("Courier New", fontSize / 3),
+                                new SolidBrush(Color.DarkCyan),
+                                new Point(binaryx + pad, binaryy + pad - fontSize / 4));
+
             images.Add(bm);
         }
         int left = -images[0].Width;
