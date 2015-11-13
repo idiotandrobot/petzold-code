@@ -1,4 +1,4 @@
-﻿namespace WindowsFormsApplication2
+﻿namespace Braille
 {
     partial class Form1
     {
