@@ -25,7 +25,7 @@ namespace Braille
             BrailleColor =  Color.RoyalBlue,
             MorseColor = Color.DarkGoldenrod,
             BinaryColor = Color.DarkCyan,
-            FontSize = 48,
+            FontSize = 42,
             DrawBlanks = true,
         };
         private void Form1_Load(object sender, EventArgs e)
