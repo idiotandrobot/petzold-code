@@ -321,13 +321,14 @@ namespace Braille
 
                     morseSequenceWidth += morseScaleSize / 2;
                 }
+                morseSequenceWidth -= morseScaleSize / 2;
 
                 foreach (bool code in c.ToMorse())
                 {                    
                     if (code)
                     {
                         g.FillRectangle(new SolidBrush(morseColor), new Rectangle(
-                            new Point(morsex + pad + morseScaleLocation, morsey + pad + morseScaleLocation + morseDashHeight / 2),
+                            new Point(morsex + pad + morseScaleLocation + fontSize + morseScaleSize /2 - (morseSequenceWidth / 2), morsey + pad + morseScaleLocation + morseDashHeight / 2),
                             morseDashSize));
 
                         morsex += morseDashSize.Width;
@@ -335,7 +336,7 @@ namespace Braille
                     else
                     {
                         g.FillEllipse(new SolidBrush(morseColor), new Rectangle(
-                            new Point(morsex + pad + morseScaleLocation, morsey + pad + morseScaleLocation),
+                            new Point(morsex + pad + morseScaleLocation + fontSize + morseScaleSize / 2 - (morseSequenceWidth / 2), morsey + pad + morseScaleLocation),
                             morseDotSize));
 
                         morsex += morseDotSize.Width;
@@ -348,7 +349,7 @@ namespace Braille
                 g.DrawString(binaryString,
                     new Font("Courier New", fontSize / 3),
                     new SolidBrush(binaryColor),
-                    new Point(binaryx + pad, binaryy + pad - fontSize / 4));
+                    new Point(binaryx + pad + fontSize / 2, binaryy + pad - fontSize / 4));
 
                 images.Add(bm);
             }
