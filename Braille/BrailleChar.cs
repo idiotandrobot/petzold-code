@@ -8,14 +8,14 @@ namespace Braille
 {
     public class BrailleChar : IEnumerable<bool>
     {
-        List<bool> Sequence = new List<bool> { false, false, false, false, false, false, };
+        bool[] Sequence = { false, false, false, false, false, false, };
 
-        public bool C1R1 { get; private set; }
-        public bool C2R1 { get; private set; }
-        public bool C1R2 { get; private set; }
-        public bool C2R2 { get; private set; }
-        public bool C1R3 { get; private set; }
-        public bool C2R3 { get; private set; }
+        public bool Dot1 { get { return Sequence[0]; } }
+        public bool Dot2 { get { return Sequence[1]; } }
+        public bool Dot3 { get { return Sequence[2]; } }
+        public bool Dot4 { get { return Sequence[3]; } }
+        public bool Dot5 { get { return Sequence[4]; } }
+        public bool Dot6 { get { return Sequence[5]; } }
 
         public BrailleChar()
         {
@@ -26,25 +26,25 @@ namespace Braille
         {
             //Should really validate sequence string
             var array = sequence.ToCharArray();
-            for (int i = 0; i < Sequence.Count; i++)
+            for (int i = 0; i < Sequence.Length; i++)
             {
                 if (array[i] == '1') Sequence[i] = true;
             }
         }
 
-        public BrailleChar(bool c1r1, bool c2r1, bool c1r2, bool c2r2, bool c1r3, bool c2r3)
+        public BrailleChar(bool dot1, bool dot2, bool dot3, bool dot4, bool dot5, bool dot6)
         {
-            Sequence[0] = c1r1;
-            Sequence[1] = c2r1;
-            Sequence[2] = c1r2;
-            Sequence[3] = c2r2;
-            Sequence[4] = c1r3;
-            Sequence[5] = c2r3;
+            Sequence[0] = dot1;
+            Sequence[1] = dot2;
+            Sequence[2] = dot3;
+            Sequence[3] = dot4;
+            Sequence[4] = dot5;
+            Sequence[5] = dot6;
         }
 
         public IEnumerator<bool> GetEnumerator()
         {
-            return Sequence.GetEnumerator();
+            return Sequence.AsEnumerable().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

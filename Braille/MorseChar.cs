@@ -10,13 +10,27 @@ namespace Braille
     {
         List<bool> Sequence = new List<bool>();
 
+        public bool? Signal1 { get { return Sequence.Count > 0 ? Sequence[0] as bool? : null; } }
+        public bool? Signal2 { get { return Sequence.Count > 1 ? Sequence[1] as bool? : null; } }
+        public bool? Signal3 { get { return Sequence.Count > 2 ? Sequence[2] as bool? : null; } }
+        public bool? Signal4 { get { return Sequence.Count > 3 ? Sequence[3] as bool? : null; } }
+
         public MorseChar()
         {
 
         }
 
+        public MorseChar(bool signal1, bool? signal2 = null, bool? signal3 = null, bool? signal4 = null)
+        {
+            Sequence.Add(signal1);
+            if (signal2.HasValue) Sequence.Add(signal2.Value);
+            if (signal3.HasValue) Sequence.Add(signal3.Value);
+            if (signal4.HasValue) Sequence.Add(signal4.Value);
+        }
+
         public MorseChar(bool[] sequence)
         {
+            //needs guarding for invalid sequence
             foreach (var code in sequence)
             {
                 Sequence.Add(code);
@@ -25,6 +39,7 @@ namespace Braille
 
         public MorseChar(string sequence)
         {
+            //needs guarding for invalid sequence
             foreach (var code in sequence.ToCharArray())
             {
                 switch (code)
@@ -51,8 +66,8 @@ namespace Braille
             return Sequence.GetEnumerator();
         }
 
-        public static MorseChar A = new MorseChar("-.");
-        public static MorseChar B = new MorseChar("--..");
+        public static MorseChar A = new MorseChar(".-");
+        public static MorseChar B = new MorseChar("-...");
         public static MorseChar C = new MorseChar("-.-.");
         public static MorseChar D = new MorseChar("-..");
         public static MorseChar E = new MorseChar(".");
