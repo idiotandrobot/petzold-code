@@ -250,6 +250,26 @@ namespace Braille
                 case 'z':
                 case 'Z':
                     return MorseChar.Z;
+                case '1':
+                    return new MorseChar(".----");
+                case '2':
+                    return new MorseChar("..---");
+                case '3':
+                    return new MorseChar("...--");
+                case '4':
+                    return new MorseChar("....-");
+                case '5':
+                    return new MorseChar(".....");
+                case '6':
+                    return new MorseChar("-....");
+                case '7':
+                    return new MorseChar("--...");
+                case '8':
+                    return new MorseChar("---..");
+                case '9':
+                    return new MorseChar("----.");
+                case '0':
+                    return new MorseChar("-----");
                 default:
                     return MorseChar.Empty;
             }
