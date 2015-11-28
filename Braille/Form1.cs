@@ -175,16 +175,20 @@ namespace Braille
             pnlDisplay.Size = pnlDisplay.BackgroundImage.Size;
         }
 
-        private Bitmap ToBraille(string text, int fontSize, Color backColor, Color brailleColor, Color morseColor, Color binaryColor, bool drawBlanks)
+        private Bitmap ToBraille(
+            string text, 
+            int fontSize, 
+            Color backColor, 
+            Color brailleColor, 
+            Color morseColor, 
+            Color binaryColor, 
+            bool drawBlanks)
         {
-            string[] lines = { };
-            int dotSize = fontSize - 2;
-            int pad = dotSize / 2;
-            int characterWidth = (fontSize * 2) + (pad * 2);
-            int characterHeight = (fontSize * 3) + (pad * 2);
             Color crColor = Color.FromArgb(255, 255, 255, 0);
             Color lfColor = Color.FromArgb(255, 0, 255, 255);
             Color unknownColor = Color.FromArgb(255, 255, 0, 255);
+
+            string[] lines = { };
             try
             {
                 lines = text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
@@ -196,11 +200,15 @@ namespace Braille
                 g.Clear(base.BackColor);
                 return bm;
             }
-            Size maxSize = new Size(0, lines.Count() * characterHeight);
+
+            var formatting = new BrailleFormatting(fontSize, brailleColor);
+            var mFormatting = new MorseFormatting(fontSize, morseColor);
+
+            var maxSize = new Size(0, lines.Count() * formatting.Height);
             foreach (string line in lines)
             {
-                if ((line.Length * characterWidth) > maxSize.Width)
-                    maxSize.Width = (line.Length * characterWidth);
+                if ((line.Length * formatting.Width) > maxSize.Width)
+                    maxSize.Width = (line.Length * formatting.Width);
             }
             List<Image> images = new List<Image>();
             Bitmap finalBM = null;
@@ -223,10 +231,8 @@ namespace Braille
             foreach (char c in text)
             {
                 BrailleChar brailleChar = c.ToBraille();
-                Bitmap bm = new Bitmap(characterWidth, characterHeight);
+                Bitmap bm = new Bitmap(formatting.Width, formatting.Height);
                 Graphics g = Graphics.FromImage(bm);
-                int x = 0;
-                int y = -fontSize;
 
                 g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 g.Clear(backColor);
@@ -262,94 +268,33 @@ namespace Braille
                             continue;
                     }
                 }
-                int actualScale = 2;
-                int actualDotSize = (int)(dotSize / actualScale);
-                int actualDotLocation = (int)((dotSize - actualDotSize) / 2);
-                int blankScale = 4;
-                int blankDotSize = (int)(dotSize / blankScale);
-                int blankDotLocation = (int)((dotSize - blankDotSize) / 2);
 
-                int morsex = x - fontSize / 2;
-                int morsey = y + fontSize + fontSize / 2;
-
-                int binaryx = x - fontSize / 2;
-                int binaryy = y + (fontSize * 3);
-
-                foreach (bool code in brailleChar)
+                var brailleLayout = new BrailleCharLayout(brailleChar, formatting);                                
+                foreach (var layout in brailleLayout.Where(d => d.Item1 || drawBlanks))
                 {
-                    y += fontSize;
-                    if (y > (fontSize * 2))
-                    {
-                        y = 0;
-                        x += fontSize;
-                    }
-                    if (code)
-                    {
-                        g.FillEllipse(new SolidBrush(brailleColor), new Rectangle(
-                            new Point(x + pad + actualDotLocation, y + pad + actualDotLocation),
-                            new Size(actualDotSize, actualDotSize)));
-                    }
-                    else
-                    {
-                        if (drawBlanks)
-                        {
-                            //g.DrawEllipse(new Pen(new SolidBrush(foreColor)), new Rectangle(new Point(x + pad, y + pad), new Size(dotSize, dotSize)));
-                            g.FillEllipse(new SolidBrush(brailleColor), new Rectangle(
-                                new Point(x + pad + blankDotLocation, y + pad + blankDotLocation),
-                                new Size(blankDotSize, blankDotSize)));
-                        }
-                    }
-
+                    g.FillEllipse(formatting.Brush, layout.Item2);
                 }
+               
+                var morseLayout = new MorseCharLayout(c.ToMorse(), mFormatting);
 
-                int morseScale = 3;
-                int morseScaleSize = (int)(dotSize / morseScale);
-                int morseScaleLocation = (int)((dotSize - morseScaleSize) / 2);
-                int morseDashWidth = morseScaleSize * 2;
-                int morseDashHeight = morseScaleSize / 2;
-
-                var morseDashSize = new Size(morseDashWidth, morseDashHeight);
-                var morseDotSize = new Size(morseScaleSize, morseScaleSize);
-
-                var morseSequenceWidth = 0;
-                foreach (bool code in c.ToMorse())
+                foreach (var layout in morseLayout)
                 {
-                    if (code)
-                        morseSequenceWidth += morseDashSize.Width;
+                    if (layout.Item1)
+                        g.FillRectangle(mFormatting.Brush, layout.Item2);
                     else
-                        morseSequenceWidth += morseDotSize.Width;
-
-                    morseSequenceWidth += morseScaleSize / 2;
+                        g.FillEllipse(mFormatting.Brush, layout.Item2);
                 }
-                morseSequenceWidth -= morseScaleSize / 2;
 
-                foreach (bool code in c.ToMorse())
-                {                    
-                    if (code)
-                    {
-                        g.FillRectangle(new SolidBrush(morseColor), new Rectangle(
-                            new Point(morsex + pad + morseScaleLocation + fontSize + morseScaleSize /2 - (morseSequenceWidth / 2), morsey + pad + morseScaleLocation + morseDashHeight / 2),
-                            morseDashSize));
-
-                        morsex += morseDashSize.Width;
-                    }
-                    else
-                    {
-                        g.FillEllipse(new SolidBrush(morseColor), new Rectangle(
-                            new Point(morsex + pad + morseScaleLocation + fontSize + morseScaleSize / 2 - (morseSequenceWidth / 2), morsey + pad + morseScaleLocation),
-                            morseDotSize));
-
-                        morsex += morseDotSize.Width;
-                    }
-
-                    morsex += morseScaleSize / 2;
-                }
+                int binaryx = -fontSize / 2;
+                int binaryy = fontSize * 2;
 
                 var binaryString = c.ToBinaryString();
                 g.DrawString(binaryString,
                     new Font("Courier New", fontSize / 3),
                     new SolidBrush(binaryColor),
-                    new Point(binaryx + pad + fontSize / 2, binaryy + pad - fontSize / 4));
+                    new Point(
+                        binaryx + formatting.Padding + fontSize / 2, 
+                        binaryy + formatting.Padding - fontSize / 4));
 
                 images.Add(bm);
             }
