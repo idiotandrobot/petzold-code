@@ -201,14 +201,15 @@ namespace Braille
                 return bm;
             }
 
-            var formatting = new BrailleFormatting(fontSize, brailleColor);
+            var bformatting = new BrailleFormatting(fontSize, brailleColor);
             var mFormatting = new MorseFormatting(fontSize, morseColor);
+            var binFormatting = new BinaryFormatting("Courier New", fontSize, binaryColor);
 
-            var maxSize = new Size(0, lines.Count() * formatting.Height);
+            var maxSize = new Size(0, lines.Count() * bformatting.Height);
             foreach (string line in lines)
             {
-                if ((line.Length * formatting.Width) > maxSize.Width)
-                    maxSize.Width = (line.Length * formatting.Width);
+                if ((line.Length * bformatting.Width) > maxSize.Width)
+                    maxSize.Width = (line.Length * bformatting.Width);
             }
             List<Image> images = new List<Image>();
             Bitmap finalBM = null;
@@ -231,7 +232,7 @@ namespace Braille
             foreach (char c in text)
             {
                 BrailleChar brailleChar = c.ToBraille();
-                Bitmap bm = new Bitmap(formatting.Width, formatting.Height);
+                Bitmap bm = new Bitmap(bformatting.Width, bformatting.Height);
                 Graphics g = Graphics.FromImage(bm);
 
                 g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -269,10 +270,10 @@ namespace Braille
                     }
                 }
 
-                var brailleLayout = new BrailleCharLayout(brailleChar, formatting);                                
+                var brailleLayout = new BrailleCharLayout(brailleChar, bformatting);                                
                 foreach (var layout in brailleLayout.Where(d => d.Item1 || drawBlanks))
                 {
-                    g.FillEllipse(formatting.Brush, layout.Item2);
+                    g.FillEllipse(bformatting.Brush, layout.Item2);
                 }
                
                 var morseLayout = new MorseCharLayout(c.ToMorse(), mFormatting);
@@ -283,18 +284,13 @@ namespace Braille
                         g.FillRectangle(mFormatting.Brush, layout.Item2);
                     else
                         g.FillEllipse(mFormatting.Brush, layout.Item2);
-                }
+                }               
 
-                int binaryx = -fontSize / 2;
-                int binaryy = fontSize * 2;
-
-                var binaryString = c.ToBinaryString();
-                g.DrawString(binaryString,
-                    new Font("Courier New", fontSize / 3),
-                    new SolidBrush(binaryColor),
-                    new Point(
-                        binaryx + formatting.Padding + fontSize / 2, 
-                        binaryy + formatting.Padding - fontSize / 4));
+                var binaryLayout = new BinaryCharLayout(c.ToBinaryString(), binFormatting);
+                g.DrawString(binaryLayout.Value,
+                    binFormatting.Font,
+                    binFormatting.Brush,
+                    binaryLayout.Location);
 
                 images.Add(bm);
             }

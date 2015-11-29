@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BinaryCharLayout.cs" />
+    <Compile Include="BinaryFormatting.cs" />
     <Compile Include="BrailleChar.cs" />
     <Compile Include="BrailleCharLayout.cs" />
     <Compile Include="BrailleFormatting.cs" />
