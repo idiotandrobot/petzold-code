@@ -52,6 +52,8 @@
     <Compile Include="BrailleCharLayout.cs" />
     <Compile Include="BrailleFormatting.cs" />
     <Compile Include="CharExtensions.cs" />
+    <Compile Include="CodeCharLayout.cs" />
+    <Compile Include="CodeLayout.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -26,7 +26,7 @@ namespace Braille
             MorseColor = Color.DarkGoldenrod,
             BinaryColor = Color.DarkCyan,
             FontSize = 42,
-            DrawBlanks = true,
+            ShowBlanks = true,
         };
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -46,7 +46,7 @@ namespace Braille
             checkBox1.Left = numericUpDown1.Left + numericUpDown1.Width + 5;
             checkBox1.Width = numericUpDown1.Width;
             checkBox1.Top = numericUpDown1.Top;
-            checkBox1.Checked = BraillePanel1.DrawBlanks;
+            checkBox1.Checked = BraillePanel1.ShowBlanks;
             textBox1.Left = 0;
             textBox1.Width = this.ClientRectangle.Width;
             textBox1.Top = numericUpDown1.Top - textBox1.Height;
@@ -63,7 +63,7 @@ namespace Braille
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            BraillePanel1.DrawBlanks = checkBox1.Checked;
+            BraillePanel1.ShowBlanks = checkBox1.Checked;
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
@@ -74,39 +74,42 @@ namespace Braille
 
     public class BraillePanel : Panel
     {
-        private string _text { get; set; }
-        private int _fontSize { get; set; }
-        private bool _drawBlanks { get; set; }
         internal dbPictureBox pnlDisplay = new dbPictureBox();
         public new event TextChangedEventHandler TextChanged;
         public delegate void TextChangedEventHandler(object sender, EventArgs e);
+
+        string _Text;
         public new string Text
         {
-            get { return _text; }
+            get { return _Text; }
             set
             {
-                _text = value;
+                _Text = value;
                 if (TextChanged != null)
                 {
                     TextChanged(this, new EventArgs());
                 }
             }
         }
-        public bool DrawBlanks
+
+        bool _ShowBlanks;
+        public bool ShowBlanks
         {
-            get { return _drawBlanks; }
+            get { return _ShowBlanks; }
             set
             {
-                _drawBlanks = value;
+                _ShowBlanks = value;
                 UpdateBraille();
             }
         }
+
+        int _FontSize;
         public int FontSize
         {
-            get { return _fontSize; }
+            get { return _FontSize; }
             set
             {
-                _fontSize = value;
+                _FontSize = value;
                 UpdateBraille();
             }
         }
@@ -170,7 +173,7 @@ namespace Braille
         public void UpdateBraille()
         {
             pnlDisplay.BackgroundImageLayout = ImageLayout.None;
-            pnlDisplay.BackgroundImage = this.ToBraille(this.Text, this.FontSize, this.BackColor, this.BrailleColor, this.MorseColor, this.BinaryColor, this.DrawBlanks);
+            pnlDisplay.BackgroundImage = this.ToBraille(this.Text, this.FontSize, this.BackColor, this.BrailleColor, this.MorseColor, this.BinaryColor, this.ShowBlanks);
             pnlDisplay.Location = new Point(10, 10);
             pnlDisplay.Size = pnlDisplay.BackgroundImage.Size;
         }
@@ -182,12 +185,8 @@ namespace Braille
             Color brailleColor, 
             Color morseColor, 
             Color binaryColor, 
-            bool drawBlanks)
+            bool showBlanks)
         {
-            Color crColor = Color.FromArgb(255, 255, 255, 0);
-            Color lfColor = Color.FromArgb(255, 0, 255, 255);
-            Color unknownColor = Color.FromArgb(255, 255, 0, 255);
-
             string[] lines = { };
             try
             {
@@ -201,7 +200,7 @@ namespace Braille
                 return bm;
             }
 
-            var bformatting = new BrailleFormatting(fontSize, brailleColor);
+            var bformatting = new BrailleFormatting(fontSize, brailleColor, showBlanks);
             var mFormatting = new MorseFormatting(fontSize, morseColor);
             var binFormatting = new BinaryFormatting("Courier New", fontSize, binaryColor);
 
@@ -211,7 +210,7 @@ namespace Braille
                 if ((line.Length * bformatting.Width) > maxSize.Width)
                     maxSize.Width = (line.Length * bformatting.Width);
             }
-            List<Image> images = new List<Image>();
+            
             Bitmap finalBM = null;
             try
             {
@@ -229,99 +228,39 @@ namespace Braille
             finalG.Clear(backColor);
             if (string.IsNullOrEmpty(text))
                 return finalBM;
-            foreach (char c in text)
+
+            var codeLayout = new CodeLayout(text,
+                bformatting,
+                mFormatting,
+                binFormatting);
+            
+            foreach (var charLayout in codeLayout)
             {
-                BrailleChar brailleChar = c.ToBraille();
                 Bitmap bm = new Bitmap(bformatting.Width, bformatting.Height);
                 Graphics g = Graphics.FromImage(bm);
 
                 g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 g.Clear(backColor);
 
-                if (brailleChar == BrailleChar.Empty)
-                {
-                    switch (c)
-                    {
-                        case ' ':
-                            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-                            g.Clear(backColor);
-                            images.Add(bm);
-                            continue;
-                        //'\r' is carriage return.
-                        //'\n' is new line.
-                        case '\r':
-                            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-                            g.Clear(backColor);
-                            bm.SetPixel(0, 0, crColor);
-                            images.Add(bm);
-                            continue;
-                        case '\n':
-                            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-                            g.Clear(backColor);
-                            bm.SetPixel(0, 0, lfColor);
-                            images.Add(bm);
-                            continue;
-                        default:
-                            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-                            g.Clear(backColor);
-                            bm.SetPixel(0, 0, unknownColor);
-                            images.Add(bm);
-                            continue;
-                    }
-                }
-
-                var brailleLayout = new BrailleCharLayout(brailleChar, bformatting);                                
-                foreach (var layout in brailleLayout.Where(d => d.Item1 || drawBlanks))
+                foreach (var layout in charLayout.BrailleLayout)
                 {
                     g.FillEllipse(bformatting.Brush, layout.Item2);
                 }
-               
-                var morseLayout = new MorseCharLayout(c.ToMorse(), mFormatting);
 
-                foreach (var layout in morseLayout)
+                foreach (var layout in charLayout.MorseLayout)
                 {
                     if (layout.Item1)
                         g.FillRectangle(mFormatting.Brush, layout.Item2);
                     else
                         g.FillEllipse(mFormatting.Brush, layout.Item2);
-                }               
+                }
 
-                var binaryLayout = new BinaryCharLayout(c.ToBinaryString(), binFormatting);
-                g.DrawString(binaryLayout.Value,
+                g.DrawString(charLayout.BinaryLayout.Value,
                     binFormatting.Font,
                     binFormatting.Brush,
-                    binaryLayout.Location);
+                    charLayout.BinaryLayout.Location);
 
-                images.Add(bm);
-            }
-            int left = -images[0].Width;
-            int top = 0;
-            foreach (Bitmap Image in images)
-            {
-                Color color = Image.GetPixel(0, 0);
-                if (color == crColor)
-                {
-                    left = -Image.Width;
-                    top += Image.Height;
-                    continue;
-                }
-                else if (color == lfColor)
-                {
-                    continue;
-                }
-                else if (color == unknownColor)
-                {
-                    //    MsgBox("unknown!")
-                    continue;
-                }
-                left += Image.Width;
-                if ((left + Image.Width) > maxSize.Width)
-                {
-                    left = 0;
-                    top += Image.Height;
-                }
-                Point location = new Point(left, top);
-                finalG.DrawImage(Image, location);
+                finalG.DrawImage(bm, charLayout.Location);
             }
             return finalBM;
         }

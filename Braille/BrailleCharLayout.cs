@@ -30,7 +30,7 @@ namespace Braille
                         formatting.GetDotLocation(x, y),
                         formatting.DotSize)));
                 }
-                else
+                else if (formatting.ShowBlanks)
                 {
                     Sequence.Add(new Tuple<bool, Rectangle>(false, new Rectangle(
                         formatting.GetBlankLocation(x, y),

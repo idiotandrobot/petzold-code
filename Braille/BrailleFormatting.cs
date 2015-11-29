@@ -22,10 +22,14 @@ namespace Braille
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        public BrailleFormatting(int fontSize, Color color)
+        public bool ShowBlanks { get; private set; }
+
+        public BrailleFormatting(int fontSize, Color color, bool showBlanks)
         {
             FontSize = fontSize;
             Brush = new SolidBrush(color);
+
+            ShowBlanks = showBlanks;
 
             int BaseDotSize = FontSize - 2;
             Padding = BaseDotSize / 2;
