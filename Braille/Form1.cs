@@ -200,15 +200,18 @@ namespace Braille
                 return bm;
             }
 
-            var bformatting = new BrailleFormatting(fontSize, brailleColor, showBlanks);
-            var mFormatting = new MorseFormatting(fontSize, morseColor);
-            var binFormatting = new BinaryFormatting("Courier New", fontSize, binaryColor);
-
-            var maxSize = new Size(0, lines.Count() * bformatting.Height);
+            var formatting = new CodeFormatting(
+                fontSize, 
+                brailleColor, 
+                morseColor, 
+                binaryColor, 
+                showBlanks);
+            
+            var maxSize = new Size(0, lines.Count() * formatting.Braille.Height);
             foreach (string line in lines)
             {
-                if ((line.Length * bformatting.Width) > maxSize.Width)
-                    maxSize.Width = (line.Length * bformatting.Width);
+                if ((line.Length * formatting.Braille.Width) > maxSize.Width)
+                    maxSize.Width = (line.Length * formatting.Braille.Width);
             }
             
             Bitmap finalBM = null;
@@ -229,14 +232,11 @@ namespace Braille
             if (string.IsNullOrEmpty(text))
                 return finalBM;
 
-            var codeLayout = new CodeLayout(text,
-                bformatting,
-                mFormatting,
-                binFormatting);
+            var codeLayout = new CodeLayout(text, formatting);
             
             foreach (var charLayout in codeLayout)
             {
-                Bitmap bm = new Bitmap(bformatting.Width, bformatting.Height);
+                Bitmap bm = new Bitmap(formatting.Braille.Width, formatting.Braille.Height);
                 Graphics g = Graphics.FromImage(bm);
 
                 g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -244,20 +244,20 @@ namespace Braille
 
                 foreach (var layout in charLayout.BrailleLayout)
                 {
-                    g.FillEllipse(bformatting.Brush, layout.Item2);
+                    g.FillEllipse(formatting.Braille.Brush, layout.Item2);
                 }
 
                 foreach (var layout in charLayout.MorseLayout)
                 {
                     if (layout.Item1)
-                        g.FillRectangle(mFormatting.Brush, layout.Item2);
+                        g.FillRectangle(formatting.Morse.Brush, layout.Item2);
                     else
-                        g.FillEllipse(mFormatting.Brush, layout.Item2);
+                        g.FillEllipse(formatting.Morse.Brush, layout.Item2);
                 }
 
                 g.DrawString(charLayout.BinaryLayout.Value,
-                    binFormatting.Font,
-                    binFormatting.Brush,
+                    formatting.Binary.Font,
+                    formatting.Binary.Brush,
                     charLayout.BinaryLayout.Location);
 
                 finalG.DrawImage(bm, charLayout.Location);

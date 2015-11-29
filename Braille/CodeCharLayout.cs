@@ -26,9 +26,7 @@ namespace Braille
             char c, 
             int left,
             int top,
-            BrailleFormatting bFormatting,
-            MorseFormatting mFormatting,
-            BinaryFormatting binFormatting)
+            CodeFormatting formatting)
         {
             Value = c;
 
@@ -38,9 +36,9 @@ namespace Braille
 
             Location = new Point(left, top);
 
-            BrailleLayout = new BrailleCharLayout(Braille, bFormatting);
-            MorseLayout = new MorseCharLayout(Morse, mFormatting);
-            BinaryLayout = new BinaryCharLayout(BinaryString, binFormatting);
+            BrailleLayout = new BrailleCharLayout(Braille, formatting.Braille);
+            MorseLayout = new MorseCharLayout(Morse, formatting.Morse);
+            BinaryLayout = new BinaryCharLayout(BinaryString, formatting.Binary);
         }
     }
 }

@@ -12,9 +12,7 @@ namespace Braille
 
         public CodeLayout(
             string text,
-            BrailleFormatting bFormatting,
-            MorseFormatting mFormatting,
-            BinaryFormatting binFormatting)
+            CodeFormatting formatting)
         {
             int left = 0;
             int top = 0;
@@ -27,14 +25,14 @@ namespace Braille
                     switch (c)
                     {
                         case ' ': // space
-                            left += bFormatting.Width;
+                            left += formatting.Braille.Width;
                             break;
 
                         case '\r': // carriage return
                             left = 0;
                             break;
                         case '\n': // new line
-                            top += bFormatting.Height;
+                            top += formatting.Braille.Height;
                             break;
                         default:
                             break;
@@ -46,13 +44,11 @@ namespace Braille
                     c,
                     left,
                     top,
-                    bFormatting,
-                    mFormatting,
-                    binFormatting);
+                    formatting);
 
                     Layouts.Add(codeLayout);
 
-                    left += bFormatting.Width;
+                    left += formatting.Braille.Width;
                     // TODO: word wrap
                 }
             }
