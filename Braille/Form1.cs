@@ -18,25 +18,30 @@ namespace Braille
         {
             InitializeComponent();
         }
+
         internal BraillePanel BraillePanel1 = new BraillePanel
         {
             BackColor = Color.White,
             ForeColor = Color.RoyalBlue,
-            BrailleColor =  Color.RoyalBlue,
+            BrailleColor = Color.RoyalBlue,
             MorseColor = Color.DarkGoldenrod,
             BinaryColor = Color.DarkCyan,
             FontSize = 42,
             ShowBlanks = true,
+            Initializing = false,
         };
+
         private void Form1_Load(object sender, EventArgs e)
         {
             BraillePanel1.Parent = this;
             doLayout();
         }
+
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             BraillePanel1.Text = textBox1.Text;
         }
+
         public void doLayout()
         {
             numericUpDown1.Top = this.ClientRectangle.Height - numericUpDown1.Height;
@@ -58,7 +63,7 @@ namespace Braille
         private void Form1_SizeChanged(object sender, EventArgs e)
         {
             doLayout();
-            BraillePanel1.UpdateBraille();
+            BraillePanel1.UpdateCode();
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -77,6 +82,8 @@ namespace Braille
         internal dbPictureBox pnlDisplay = new dbPictureBox();
         public new event TextChangedEventHandler TextChanged;
         public delegate void TextChangedEventHandler(object sender, EventArgs e);
+
+        public bool Initializing { get; set; }
 
         string _Text;
         public new string Text
@@ -99,7 +106,7 @@ namespace Braille
             set
             {
                 _ShowBlanks = value;
-                UpdateBraille();
+                UpdateCode();
             }
         }
 
@@ -110,7 +117,7 @@ namespace Braille
             set
             {
                 _FontSize = value;
-                UpdateBraille();
+                UpdateCode();
             }
         }
 
@@ -121,7 +128,7 @@ namespace Braille
             set
             {
                 _BrailleColor = value;
-                UpdateBraille();
+                UpdateCode();
             }
         }
 
@@ -132,7 +139,7 @@ namespace Braille
             set
             {
                 _MorseColor = value;
-                UpdateBraille();
+                UpdateCode();
             }
         }
 
@@ -143,12 +150,13 @@ namespace Braille
             set
             {
                 _BinaryColor = value;
-                UpdateBraille();
+                UpdateCode();
             }
         }
 
         public BraillePanel()
         {
+            Initializing = true;
             TextChanged += Text_Changed;
             base.DoubleBuffered = true;
             base.AutoScroll = true;
@@ -158,6 +166,7 @@ namespace Braille
 
         public BraillePanel(string text)
         {
+            Initializing = true;
             TextChanged += Text_Changed;
             this.Text = text;
             this.AutoScroll = true;
@@ -167,18 +176,19 @@ namespace Braille
 
         public void Text_Changed(object sender, EventArgs e)
         {
-            UpdateBraille();
+            UpdateCode();
         }
 
-        public void UpdateBraille()
+        public void UpdateCode()
         {
+            if (Initializing) return;
             pnlDisplay.BackgroundImageLayout = ImageLayout.None;
-            pnlDisplay.BackgroundImage = this.ToBraille(this.Text, this.FontSize, this.BackColor, this.BrailleColor, this.MorseColor, this.BinaryColor, this.ShowBlanks);
+            pnlDisplay.BackgroundImage = this.ToCode(this.Text, this.FontSize, this.BackColor, this.BrailleColor, this.MorseColor, this.BinaryColor, this.ShowBlanks);
             pnlDisplay.Location = new Point(10, 10);
             pnlDisplay.Size = pnlDisplay.BackgroundImage.Size;
         }
 
-        private Bitmap ToBraille(
+        private Bitmap ToCode(
             string text, 
             int fontSize, 
             Color backColor, 
@@ -187,83 +197,18 @@ namespace Braille
             Color binaryColor, 
             bool showBlanks)
         {
-            string[] lines = { };
-            try
-            {
-                lines = text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
-            }
-            catch
-            {
-                Bitmap bm = new Bitmap(1, 1);
-                Graphics g = Graphics.FromImage(bm);
-                g.Clear(base.BackColor);
-                return bm;
-            }
-
             var formatting = new CodeFormatting(
-                fontSize, 
-                brailleColor, 
-                morseColor, 
-                binaryColor, 
+                fontSize,
+                backColor,
+                brailleColor,
+                morseColor,
+                binaryColor,
                 showBlanks);
-            
-            var maxSize = new Size(0, lines.Count() * formatting.Braille.Height);
-            foreach (string line in lines)
-            {
-                if ((line.Length * formatting.Braille.Width) > maxSize.Width)
-                    maxSize.Width = (line.Length * formatting.Braille.Width);
-            }
-            
-            Bitmap finalBM = null;
-            try
-            {
-                finalBM = new Bitmap(maxSize.Width, maxSize.Height);
-            }
-            catch
-            {
-                Bitmap bm = new Bitmap(1, 1);
-                Graphics g = Graphics.FromImage(bm);
-                g.Clear(base.BackColor);
-                return bm;
-            }
-            Graphics finalG = Graphics.FromImage(finalBM);
-            finalG.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-            finalG.Clear(backColor);
-            if (string.IsNullOrEmpty(text))
-                return finalBM;
 
-            var codeLayout = new CodeLayout(text, formatting);
-            
-            foreach (var charLayout in codeLayout)
-            {
-                Bitmap bm = new Bitmap(formatting.Braille.Width, formatting.Braille.Height);
-                Graphics g = Graphics.FromImage(bm);
-
-                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                g.Clear(backColor);
-
-                foreach (var layout in charLayout.BrailleLayout)
-                {
-                    g.FillEllipse(formatting.Braille.Brush, layout.Item2);
-                }
-
-                foreach (var layout in charLayout.MorseLayout)
-                {
-                    if (layout.Item1)
-                        g.FillRectangle(formatting.Morse.Brush, layout.Item2);
-                    else
-                        g.FillEllipse(formatting.Morse.Brush, layout.Item2);
-                }
-
-                g.DrawString(charLayout.BinaryLayout.Value,
-                    formatting.Binary.Font,
-                    formatting.Binary.Brush,
-                    charLayout.BinaryLayout.Location);
-
-                finalG.DrawImage(bm, charLayout.Location);
-            }
-            return finalBM;
+            var pad = new CodePad(text, formatting);
+            return pad.ToBitmap();
         }
+
         //This class the db Picturebox, is Double Buffered, for less flickering
         public class dbPictureBox : PictureBox
         {

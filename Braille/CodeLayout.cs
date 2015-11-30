@@ -8,50 +8,67 @@ namespace Braille
 {
     public class CodeLayout : IEnumerable<CodeCharLayout>
     {
+        public int Width { get; private set; }
+        public int Height { get; private set; }
+
         List<CodeCharLayout> Layouts = new List<CodeCharLayout>();
 
         public CodeLayout(
             string text,
             CodeFormatting formatting)
-        {
-            int left = 0;
-            int top = 0;
-            foreach (char c in text)
+        {            
+            int maxWidth = 0;
+            int height = 0;
+            if (string.IsNullOrEmpty(text))
             {
-                var braille = c.ToBraille();
-
-                if (braille == BrailleChar.Empty)
+                maxWidth = 1;
+                height = 1;
+            }
+            else
+            {
+                int left = 0;
+                int top = 0;
+                foreach (char c in text)
                 {
-                    switch (c)
-                    {
-                        case ' ': // space
-                            left += formatting.Braille.Width;
-                            break;
+                    var braille = c.ToBraille();
 
-                        case '\r': // carriage return
-                            left = 0;
-                            break;
-                        case '\n': // new line
-                            top += formatting.Braille.Height;
-                            break;
-                        default:
-                            break;
+                    if (braille == BrailleChar.Empty)
+                    {
+                        switch (c)
+                        {
+                            case ' ': // space
+                                left += formatting.Braille.Width;
+                                break;
+
+                            case '\r': // carriage return
+                                left = 0;
+                                break;
+                            case '\n': // new line
+                                top += formatting.Braille.Height;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        var codeLayout = new CodeCharLayout(
+                        c,
+                        left,
+                        top,
+                        formatting);
+
+                        Layouts.Add(codeLayout);
+
+                        left += formatting.Braille.Width;
+                        if (left > maxWidth) maxWidth = left;
+                        height = top + formatting.Braille.Height;
+                        // TODO: word wrap
                     }
                 }
-                else
-                {
-                    var codeLayout = new CodeCharLayout(
-                    c,
-                    left,
-                    top,
-                    formatting);
-
-                    Layouts.Add(codeLayout);
-
-                    left += formatting.Braille.Width;
-                    // TODO: word wrap
-                }
             }
+            Width = maxWidth;
+            Height = height;
         }
 
         public IEnumerator<CodeCharLayout> GetEnumerator()
