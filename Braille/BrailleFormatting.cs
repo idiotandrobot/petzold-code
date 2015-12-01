@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PropertyChanged;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -6,44 +7,81 @@ using System.Text;
 
 namespace Braille
 {
+    [ImplementPropertyChanged]
     public class BrailleFormatting
     {
-        int DotScale = 2;
-        int DotLocation;
-
-        int BlankScale = 4;
-        int BlankLocation;
-
-        public int FontSize { get; private set; }
-        public Brush Brush { get; private set; }
-
-        public int Padding { get; private set; }
-
-        public int Width { get; private set; }
-        public int Height { get; private set; }
-
+        public int FontSize { get; set; }
+        public Color Color { get; set; }
         public bool ShowBlanks { get; private set; }
 
+        public BrailleFormatting()
+        {
+
+        }
+        
         public BrailleFormatting(int fontSize, Color color, bool showBlanks)
         {
             FontSize = fontSize;
-            Brush = new SolidBrush(color);
-
+            Color = color;
             ShowBlanks = showBlanks;
+        }
 
-            int BaseDotSize = FontSize - 2;
-            Padding = BaseDotSize / 2;
+        Brush _Brush = null;
+        public Brush Brush
+        {
+            get { return _Brush ?? (Brush = new SolidBrush(Color)); }
+            private set { _Brush = value; }
+        }
 
-            Width = (FontSize * 2) + (Padding * 2);
-            Height = (FontSize * 3) + (Padding * 2);
+        int? _BaseDotSize;
+        int BaseDotSize
+        {
+            get { return _BaseDotSize ?? (BaseDotSize = FontSize - 2); }
+            set { _BaseDotSize = value; }
+        }
 
-            int dotSize = (int)(BaseDotSize / DotScale);
-            DotSize = new Size(dotSize, dotSize);
-            DotLocation = (int)((BaseDotSize - dotSize) / 2);
+        int? _Padding = null;
+        public int Padding
+        {
+            get { return _Padding ?? (Padding = BaseDotSize / 2); }
+            private set { _Padding = value; }
+        }
 
-            int blankSize = (int)(BaseDotSize / BlankScale);
-            BlankSize = new Size(blankSize, blankSize);
-            BlankLocation = (int)((BaseDotSize - blankSize) / 2);
+        int? _Width = null;
+        public int Width
+        {
+            get { return _Width ?? (Width = (FontSize * 2) + (Padding * 2)); }
+            private set { _Width = value; }
+        }
+
+        int? _Height = null;
+        public int Height
+        {
+            get { return _Height ?? (Height = (FontSize * 3) + (Padding * 2)); }
+            private set { _Height = value; }
+        }
+        
+        int DotScale = 2;
+
+        int? _dotSize = null;
+        int dotSize
+        {
+            get { return _dotSize ?? (dotSize = (int)(BaseDotSize / DotScale)); }
+            set { _dotSize = value; }
+        }
+
+        Size? _DotSize;
+        public Size DotSize
+        {
+            get { return _DotSize ?? (DotSize = new Size(dotSize, dotSize)); }
+            private set { _DotSize = value; }
+        }
+
+        int? _DotLocation;
+        int DotLocation
+        {
+            get { return _DotLocation ?? (DotLocation = (int)((BaseDotSize - dotSize) / 2)); }
+            set { _DotLocation = value; }
         }
 
         public Point GetDotLocation(int x, int y)
@@ -51,13 +89,32 @@ namespace Braille
             return new Point(x + Padding + DotLocation, y + Padding + DotLocation);
         }
 
-        public Size DotSize { get; private set;}
+        int BlankScale = 4;
 
+        int? _blankSize;
+        int blankSize
+        {
+            get { return _blankSize ?? (blankSize = (int)(BaseDotSize / BlankScale)); }
+            set { _blankSize = value; }
+        }
+
+        Size? _BlankSize;
+        public Size BlankSize
+        {
+            get { return _BlankSize ?? (BlankSize = new Size(blankSize, blankSize)); }
+            set { _BlankSize = value; }
+        }
+        
+        int? _BlankLocation;
+        int BlankLocation
+        {
+            get { return _BlankLocation ?? (BlankLocation = (int)((BaseDotSize - blankSize) / 2)); }
+            set { _BlankLocation = value; }
+        }
+        
         public Point GetBlankLocation(int x, int y)
         {
             return new Point(x + Padding + BlankLocation, y + Padding + BlankLocation);
         }
-
-        public Size BlankSize { get; private set; }
     }
 }
