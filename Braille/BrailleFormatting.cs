@@ -23,6 +23,36 @@ namespace Braille
             Color = color;
             ShowBlanks = showBlanks;
 
+            var notify = this as INotifyPropertyChanged;
+            if (notify != null)
+            {
+                notify.PropertyChanged += (s, e) =>
+                {
+                    switch (e.PropertyName)
+                    {
+                        case "FontSize":
+                            
+                            _BaseDotSize = null;
+                            _Padding = null;                            
+                            _Width = null;
+                            _Height = null;
+                            _dotSize = null;
+                            _DotSize = null;
+                            _DotLocation = null;
+                            _blankSize = null;
+                            _BlankSize = null;
+                            _BlankLocation = null;
+                            break;
+                        case "Color":
+                            _Brush = null;
+                            break;
+                        default:
+                            break;
+                    }
+
+                };
+            }
+
 #if DEBUG
             var debug = this as INotifyPropertyChanged;
             if (debug != null) debug.PropertyChanged += (s, e) => { Debug.WriteLine("BrailleFormatting." + e.PropertyName); };

@@ -41,6 +41,27 @@ namespace Braille
             FontSize = fontSize;
             Color = color;
 
+            var notify = this as INotifyPropertyChanged;
+            if (notify != null)
+            {
+                notify.PropertyChanged += (s, e) =>
+                {
+                    switch (e.PropertyName)
+                    {
+                        case "FontSize":
+                            _Padding = null;
+                            _Font = null;
+                            break;
+                        case "Color":
+                            _Brush = null;
+                            break;
+                        default:
+                            break;
+                    }
+                
+                };
+            }
+
 #if DEBUG
             var debug = this as INotifyPropertyChanged;
             if (debug != null) debug.PropertyChanged += (s, e) => { Debug.WriteLine("BinaryFormatting." + e.PropertyName); };

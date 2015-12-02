@@ -60,9 +60,24 @@ namespace Braille
                 Color.DarkCyan,
                 true);
 
-            var textChanged = this as INotifyPropertyChanged;
-            if (textChanged != null)
-                textChanged.PropertyChanged += (s, e) => { if (e.PropertyName == "Text") UpdateCodeBox(); };
+            var notify = this as INotifyPropertyChanged;
+            if (notify != null)
+                notify.PropertyChanged += (s, e) => 
+                {
+                    switch (e.PropertyName)
+                    {
+                        case "FontSize":
+                        case "BrailleColor":
+                        case "MorseColor":
+                        case "BinaryColor":
+                        case "ShowBlanks":
+                        case "Text":
+                            UpdateCodeBox();
+                            break;
+                        default:
+                            break;
+                    }
+                };
 
 #if DEBUG
             var debug = this as INotifyPropertyChanged;

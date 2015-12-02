@@ -30,7 +30,7 @@ namespace Braille
         }
 
         public int FontSize { get; set; }
-        public Color BackColor { get; private set; }
+        public Color BackColor { get; set; }
 
         public CodeFormatting() {  }
 
@@ -49,6 +49,19 @@ namespace Braille
             Morse = new MorseFormatting(fontSize, morseColor);
             Binary = new BinaryFormatting("Courier New", fontSize, binaryColor);
 
+            var notify = this as INotifyPropertyChanged;
+            if (notify != null)
+            {
+                notify.PropertyChanged += (s, e) => 
+                {
+                    if (e.PropertyName == "FontSize")
+                    {
+                        Braille.FontSize = FontSize;
+                        Morse.FontSize = FontSize;
+                        Binary.FontSize = FontSize;
+                    }
+                };
+            }
 #if DEBUG
             var debug = this as INotifyPropertyChanged;
             if (debug != null) debug.PropertyChanged += (s, e) => { Debug.WriteLine("CodeFormatting." + e.PropertyName); };
