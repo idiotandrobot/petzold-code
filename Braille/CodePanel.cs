@@ -13,44 +13,55 @@ namespace Braille
 
         CodeFormatting Formatting;
 
+        [Category("Appearance")]
         public int FontSize
         {
             get { return Formatting.FontSize; }
             set { Formatting.FontSize = value; }
         }
 
+        //public override Color BackColor
+        //{
+        //    get { return Formatting.BackColor; }
+        //    set { Formatting.BackColor = value; }
+        //}
+
+        [Category("Appearance")]
         public Color BrailleColor
         {
             get { return Formatting.Braille.Color; }
             set { Formatting.Braille.Color = value; }
         }
 
+        [Category("Appearance")]
         public Color MorseColor
         {
             get { return Formatting.Morse.Color; }
             set { Formatting.Morse.Color = value; }
         }
 
+        [Category("Appearance")]
         public Color BinaryColor
         {
             get { return Formatting.Binary.Color; }
             set { Formatting.Binary.Color = value; }
         }
 
+        [Category("Appearance")]
         public bool ShowBlanks
         {
             get { return Formatting.Braille.ShowBlanks; }
             set { Formatting.Braille.ShowBlanks = value; }
         }
 
-        public new string Text { get; set; }
+        public override string Text { get; set; } 
 
         public CodePanel()
         {
-            base.AutoScroll = true;
-            base.Controls.Add(CodeBox);
-            base.Cursor = Cursors.IBeam;
-            this.BackColor = Color.White;     
+            Controls.Add(CodeBox);
+
+            AutoScroll = true;
+            BackColor = Color.White;     
 
             Formatting = new CodeFormatting(
                 42,
@@ -60,6 +71,9 @@ namespace Braille
                 Color.DarkCyan,
                 true);
 
+            CodeBox.Formatting = Formatting;
+            CodeBox.Text = "CODE";
+
             var notify = this as INotifyPropertyChanged;
             if (notify != null)
                 notify.PropertyChanged += (s, e) => 
@@ -67,30 +81,22 @@ namespace Braille
                     switch (e.PropertyName)
                     {
                         case "FontSize":
+                        //case "BackColor":
                         case "BrailleColor":
                         case "MorseColor":
                         case "BinaryColor":
                         case "ShowBlanks":
                         case "Text":
-                            UpdateCodeBox();
+                            CodeBox.Text = Text;
                             break;
                         default:
                             break;
                     }
                 };
-
 #if DEBUG
             var debug = this as INotifyPropertyChanged;
             if (debug != null) debug.PropertyChanged += (s, e) => { Debug.WriteLine("CodePanel." + e.PropertyName); };
 #endif
-        }
-
-        public void UpdateCodeBox()
-        {
-            CodeBox.BackgroundImageLayout = ImageLayout.None;
-            CodeBox.BackgroundImage = new CodePad(Text, Formatting).ToBitmap();
-            CodeBox.Location = new Point(10, 10);
-            CodeBox.Size = CodeBox.BackgroundImage.Size;
         }
     }
 }

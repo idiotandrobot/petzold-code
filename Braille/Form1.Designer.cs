@@ -31,37 +31,44 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.codePanel1 = new Braille.CodePanel();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // textBox1
             // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Font = new System.Drawing.Font("Consolas", 12F);
-            this.textBox1.Location = new System.Drawing.Point(2, 425);
+            this.textBox1.Location = new System.Drawing.Point(13, 402);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(315, 149);
+            this.textBox1.Size = new System.Drawing.Size(677, 207);
             this.textBox1.TabIndex = 0;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // checkBox1
             // 
+            this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBox1.AutoSize = true;
             this.checkBox1.Font = new System.Drawing.Font("Consolas", 12F);
-            this.checkBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.checkBox1.Location = new System.Drawing.Point(320, 581);
+            this.checkBox1.Location = new System.Drawing.Point(194, 623);
+            this.checkBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(127, 23);
+            this.checkBox1.Size = new System.Drawing.Size(285, 32);
             this.checkBox1.TabIndex = 1;
-            this.checkBox1.Text = "Draw Blanks";
+            this.checkBox1.Text = "Show Braille Blanks";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // numericUpDown1
             // 
+            this.numericUpDown1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.numericUpDown1.Font = new System.Drawing.Font("Consolas", 12F);
-            this.numericUpDown1.Location = new System.Drawing.Point(12, 581);
+            this.numericUpDown1.Location = new System.Drawing.Point(13, 619);
+            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             150,
             0,
@@ -73,7 +80,7 @@
             0,
             0});
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 26);
+            this.numericUpDown1.Size = new System.Drawing.Size(173, 36);
             this.numericUpDown1.TabIndex = 2;
             this.numericUpDown1.Value = new decimal(new int[] {
             10,
@@ -82,19 +89,38 @@
             0});
             this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
+            // codePanel1
+            // 
+            this.codePanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.codePanel1.AutoScroll = true;
+            this.codePanel1.BackColor = System.Drawing.Color.White;
+            this.codePanel1.BinaryColor = System.Drawing.Color.DarkCyan;
+            this.codePanel1.BrailleColor = System.Drawing.Color.RoyalBlue;
+            this.codePanel1.FontSize = 42;
+            this.codePanel1.Location = new System.Drawing.Point(12, 12);
+            this.codePanel1.MorseColor = System.Drawing.Color.Goldenrod;
+            this.codePanel1.Name = "codePanel1";
+            this.codePanel1.ShowBlanks = true;
+            this.codePanel1.Size = new System.Drawing.Size(679, 371);
+            this.codePanel1.TabIndex = 3;
+            this.codePanel1.Text = null;
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(734, 711);
+            this.BackColor = System.Drawing.SystemColors.Window;
+            this.ClientSize = new System.Drawing.Size(703, 669);
+            this.Controls.Add(this.codePanel1);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.textBox1);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Form1";
-            this.Text = "Braille Maker";
+            this.Text = "Petzold Encoder";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -106,6 +132,7 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private CodePanel codePanel1;
     }
 }
 
