@@ -1,50 +1,78 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using PropertyChanged;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 
 namespace Braille
 {
+    [ImplementPropertyChanged]
     public class MorseFormatting
     {
-        int MorseScaleSize;
-        int MorseScaleLocation;
-        
-        public int FontSize { get; private set; }
-        public Brush Brush { get; private set; }
+        public int FontSize { get; set; }
+        public Color Color { get; set; }
 
-        public int Padding { get; private set; }
+        public MorseFormatting() { }
 
         public MorseFormatting(int fontSize, Color color)
         {
             FontSize = fontSize;
-            Brush = new SolidBrush(color);
-
-            int BaseDotSize = FontSize - 2;
-            Padding = BaseDotSize / 2;
-
-            int morseScale = 3;
-            MorseScaleSize = (int)((FontSize - 2) / morseScale);
-
-            DotSize = new Size(MorseScaleSize, MorseScaleSize);
-
-            MorseScaleLocation = (int)(((FontSize - 2) - MorseScaleSize) / 2);
-
-            DashSize = new Size(MorseScaleSize * 2, MorseScaleSize / 2);
-
-            SpaceWidth = MorseScaleSize / 2;
-
+            Color = color;
+#if DEBUG
+            var debug = this as INotifyPropertyChanged;
+            if (debug != null) debug.PropertyChanged += (s, e) => { Debug.WriteLine("MorseFormatting." + e.PropertyName); };
+#endif
         }
 
+        Brush _Brush = null;
+        public Brush Brush
+        {
+            get { return _Brush ?? (Brush = new SolidBrush(Color)); }
+            private set { _Brush = value; }
+        }
+
+        int? _Padding = null;
+        public int Padding
+        {
+            get { return _Padding ?? ((FontSize - 2) / 2); }
+            private set { _Padding = value; }
+        }
+
+        int MorseScale = 3;
+
+        int? _MorseScaleSize;
+        int MorseScaleSize
+        {
+            get { return _MorseScaleSize ?? (MorseScaleSize = (int)((FontSize - 2) / MorseScale)); }
+            set { _MorseScaleSize = value; }
+        }
+
+        Size? _DotSize = null;
+        public Size DotSize
+        {
+            get { return _DotSize ?? (DotSize = new Size(MorseScaleSize, MorseScaleSize)); }
+            private set { _DotSize = value; }
+        }
+
+        Size? _DashSize = null;
+        public Size DashSize
+        {
+            get { return _DashSize ?? (DashSize = new Size(MorseScaleSize * 2, MorseScaleSize / 2)); }
+            private set { _DashSize = value; }
+        }
+
+        int? _MorseScaleLocation = null;
+        int MorseScaleLocation
+        {
+            get { return _MorseScaleLocation ?? (MorseScaleLocation = (int)(((FontSize - 2) - MorseScaleSize) / 2)); }
+            set { _MorseScaleLocation = value; }
+        }           
+        
         public Point GetDashLocation(int x, int y, int sequenceWidth)
         {
             return new Point(
                 x + Padding + MorseScaleLocation + FontSize + MorseScaleSize / 2 - (sequenceWidth / 2),
                 y + Padding + MorseScaleLocation + DashSize.Height / 2);
         }
-
-        public Size DashSize { get; private set; }
 
         public Point GetDotLocation(int x, int y, int sequenceWidth)
         {
@@ -53,8 +81,11 @@ namespace Braille
                  y + Padding + MorseScaleLocation);
         }
 
-        public Size DotSize { get; private set; }
-
-        public int SpaceWidth { get; private set; }
+        int? _SpaceWidth = null;
+        public int SpaceWidth
+        {
+            get { return _SpaceWidth ?? (SpaceWidth = MorseScaleSize / 2); }
+            private set { _SpaceWidth = value; }
+        }
     }
 }

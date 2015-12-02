@@ -63,6 +63,12 @@
     <Compile Include="CodeFormatting.cs" />
     <Compile Include="CodeLayout.cs" />
     <Compile Include="CodePad.cs" />
+    <Compile Include="CodePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CodeBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

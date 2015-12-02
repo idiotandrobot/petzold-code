@@ -1,9 +1,7 @@
 ﻿using PropertyChanged;
-using System;
-using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 
 namespace Braille
 {
@@ -12,7 +10,7 @@ namespace Braille
     {
         public int FontSize { get; set; }
         public Color Color { get; set; }
-        public bool ShowBlanks { get; private set; }
+        public bool ShowBlanks { get; set; }
 
         public BrailleFormatting()
         {
@@ -24,6 +22,11 @@ namespace Braille
             FontSize = fontSize;
             Color = color;
             ShowBlanks = showBlanks;
+
+#if DEBUG
+            var debug = this as INotifyPropertyChanged;
+            if (debug != null) debug.PropertyChanged += (s, e) => { Debug.WriteLine("BrailleFormatting." + e.PropertyName); };
+#endif
         }
 
         Brush _Brush = null;

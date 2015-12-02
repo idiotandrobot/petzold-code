@@ -1,4 +1,6 @@
 ﻿using PropertyChanged;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 
 namespace Braille
@@ -38,6 +40,11 @@ namespace Braille
             FontName = fontName;
             FontSize = fontSize;
             Color = color;
+
+#if DEBUG
+            var debug = this as INotifyPropertyChanged;
+            if (debug != null) debug.PropertyChanged += (s, e) => { Debug.WriteLine("BinaryFormatting." + e.PropertyName); };
+#endif
         }
 
         public Point GetLocation(int x, int y)
