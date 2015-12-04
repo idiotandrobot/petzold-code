@@ -57,7 +57,6 @@
   <ItemGroup>
     <Compile Include="BinaryCharLayout.cs" />
     <Compile Include="BinaryFormatting.cs" />
-    <Compile Include="BrailleChar.cs" />
     <Compile Include="BrailleCharLayout.cs" />
     <Compile Include="BrailleFormatting.cs" />
     <Compile Include="CharExtensions.cs" />
@@ -78,7 +77,6 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="MorseChar.cs" />
     <Compile Include="MorseCharLayout.cs" />
     <Compile Include="MorseFormatting.cs" />
     <Compile Include="Program.cs" />
@@ -113,6 +111,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Petzold.Code\Petzold.Code.csproj">
+      <Project>{80ff4128-9e42-4ce4-b6ad-529e2a2dc01d}</Project>
+      <Name>Petzold.Code</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\Fody.1.29.2\build\dotnet\Fody.targets" Condition="Exists('..\..\packages\Fody.1.29.2\build\dotnet\Fody.targets')" />
