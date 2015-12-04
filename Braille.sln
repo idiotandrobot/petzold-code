@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C# Express 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Braille", "Braille\Braille.csproj", "{2AE9A935-67CE-408C-BD67-9F351BF34B17}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Braille", "source\Braille\Braille.csproj", "{2AE9A935-67CE-408C-BD67-9F351BF34B17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
