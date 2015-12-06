@@ -103,7 +103,6 @@
             this.codePanel1.ShowBlanks = true;
             this.codePanel1.Size = new System.Drawing.Size(718, 517);
             this.codePanel1.TabIndex = 3;
-            this.codePanel1.Text = null;
             // 
             // Form1
             // 
