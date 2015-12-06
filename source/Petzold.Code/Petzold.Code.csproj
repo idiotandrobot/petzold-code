@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BrailleChar.cs" />
+    <Compile Include="CharExtensions.cs" />
     <Compile Include="MorseChar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

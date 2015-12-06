@@ -59,7 +59,6 @@
     <Compile Include="BinaryFormatting.cs" />
     <Compile Include="BrailleCharLayout.cs" />
     <Compile Include="BrailleFormatting.cs" />
-    <Compile Include="CharExtensions.cs" />
     <Compile Include="CodeCharPen.cs" />
     <Compile Include="CodeCharLayout.cs" />
     <Compile Include="CodeFormatting.cs" />
