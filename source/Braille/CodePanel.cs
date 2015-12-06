@@ -9,9 +9,8 @@ namespace Braille
     [ImplementPropertyChanged]
     public class CodePanel : Panel
     {
-        CodeBox CodeBox = new CodeBox();
-
         CodeFormatting Formatting;
+        CodeBox CodeBox;        
 
         [Category("Appearance")]
         public int FontSize
@@ -54,44 +53,39 @@ namespace Braille
             set { Formatting.Braille.ShowBlanks = value; }
         }
 
-        public override string Text { get; set; } 
+        public override string Text
+        {
+            get { return CodeBox.Text; }
+            set { CodeBox.Text = value; }
+        }        
 
         public CodePanel()
         {
-            Controls.Add(CodeBox);
-
             AutoScroll = true;
-            
 
             Formatting = new CodeFormatting();
-
             BackColor = Formatting.BackColor;
-            CodeBox.Formatting = Formatting;
-            CodeBox.Text = "CODE";
 
-            var notify = this as INotifyPropertyChanged;
-            if (notify != null)
-                notify.PropertyChanged += (s, e) => 
+            CodeBox = new CodeBox(new CodePad(Formatting));
+            Controls.Add(CodeBox);
+
+            (this as INotifyPropertyChanged).PropertyChanged += (s, e) =>
+            {
+                switch (e.PropertyName)
                 {
-                    switch (e.PropertyName)
-                    {
-                        case "FontSize":
-                        //case "BackColor":
-                        case "BrailleColor":
-                        case "MorseColor":
-                        case "BinaryColor":
-                        case "ShowBlanks":
-                        case "Text":
-                            CodeBox.Text = Text;
-                            break;
-                        default:
-                            break;
-                    }
-                };
-#if DEBUG
-            var debug = this as INotifyPropertyChanged;
-            if (debug != null) debug.PropertyChanged += (s, e) => { Debug.WriteLine("CodePanel." + e.PropertyName); };
-#endif
+                    //case "BackColor":
+                    case "FontSize":                    
+                    case "BrailleColor":
+                    case "MorseColor":
+                    case "BinaryColor":
+                    case "ShowBlanks":
+                    case "Text":
+                        CodeBox.Text = Text;
+                        break;
+                    default:
+                        break;
+                }
+            };
         }
     }
 }

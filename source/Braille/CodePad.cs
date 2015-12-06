@@ -6,27 +6,28 @@ namespace Braille
     public class CodePad
     {
         CodeFormatting Formatting { get; set; }
-        CodeLayout Layout { get; set; }
         CodeCharPen Pen { get; set; }
 
-        public CodePad(string text, CodeFormatting formatting)
+        public CodePad(CodeFormatting formatting)
         {
-            Formatting = formatting;
-            Layout = new CodeLayout(text, formatting);
+            if (formatting == null) throw new ArgumentNullException("formatting");
+            Formatting = formatting;            
             Pen = new CodeCharPen(formatting);
         }
 
-        public Bitmap ToBitmap()
+        public Bitmap ToBitmap(string text)
         {            
             try
             {
-                var bitmap = new Bitmap(Layout.Width, Layout.Height);
+                var layout = new CodeLayout(text, Formatting);
+
+                var bitmap = new Bitmap(layout.Width, layout.Height);
 
                 Graphics g = Graphics.FromImage(bitmap);
                 g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
                 g.Clear(Formatting.BackColor);
 
-                foreach (var charLayout in Layout)
+                foreach (var charLayout in layout)
                 {
                     g.DrawImage(Pen.Draw(charLayout), charLayout.Location);
                 }
