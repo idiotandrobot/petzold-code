@@ -57,32 +57,22 @@ namespace Braille
         }
 
         public BinaryFormatting()
-        {
-            var notify = this as INotifyPropertyChanged;
-            if (notify != null)
+        { 
+            (this as INotifyPropertyChanged).PropertyChanged += (s, e) =>
             {
-                notify.PropertyChanged += (s, e) =>
+                switch (e.PropertyName)
                 {
-                    switch (e.PropertyName)
-                    {
-                        case "FontSize":
-                            _Padding = null;
-                            _Font = null;
-                            break;
-                        case "Color":
-                            _Brush = null;
-                            break;
-                        default:
-                            break;
-                    }
-                
-                };
-            }
-
-#if DEBUG
-            var debug = this as INotifyPropertyChanged;
-            if (debug != null) debug.PropertyChanged += (s, e) => { Debug.WriteLine("BinaryFormatting." + e.PropertyName); };
-#endif
+                    case "FontSize":
+                        _Padding = null;
+                        _Font = null;
+                        break;
+                    case "Color":
+                        _Brush = null;
+                        break;
+                    default:
+                        break;
+                }                
+            };
         }
 
         public Point GetLocation(int x, int y)

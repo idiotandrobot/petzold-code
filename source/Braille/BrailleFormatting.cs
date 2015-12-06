@@ -8,7 +8,6 @@ namespace Braille
     [ImplementPropertyChanged]
     public class BrailleFormatting
     {
-
         public static int DefaultFontSize = CodeFormatting.DefaultFontSize;
 
         int? _FontSize = null;
@@ -38,39 +37,29 @@ namespace Braille
         
         public BrailleFormatting()
         {
-            var notify = this as INotifyPropertyChanged;
-            if (notify != null)
+            (this as INotifyPropertyChanged).PropertyChanged += (s, e) =>
             {
-                notify.PropertyChanged += (s, e) =>
+                switch (e.PropertyName)
                 {
-                    switch (e.PropertyName)
-                    {
-                        case "FontSize":                            
-                            _BaseDotSize = null;
-                            _Padding = null;                            
-                            _Width = null;
-                            _Height = null;
-                            _dotSize = null;
-                            _DotSize = null;
-                            _DotLocation = null;
-                            _blankSize = null;
-                            _BlankSize = null;
-                            _BlankLocation = null;
-                            break;
-                        case "Color":
-                            _Brush = null;
-                            break;
-                        default:
-                            break;
-                    }
-
-                };
-            }
-
-#if DEBUG
-            var debug = this as INotifyPropertyChanged;
-            if (debug != null) debug.PropertyChanged += (s, e) => { Debug.WriteLine("BrailleFormatting." + e.PropertyName); };
-#endif
+                    case "FontSize":                            
+                        _BaseDotSize = null;
+                        _Padding = null;                            
+                        _Width = null;
+                        _Height = null;
+                        _dotSize = null;
+                        _DotSize = null;
+                        _DotLocation = null;
+                        _blankSize = null;
+                        _BlankSize = null;
+                        _BlankLocation = null;
+                        break;
+                    case "Color":
+                        _Brush = null;
+                        break;
+                    default:
+                        break;
+                }
+            };
         }
 
         Brush _Brush;

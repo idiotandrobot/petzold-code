@@ -8,7 +8,7 @@ namespace Braille
     [ImplementPropertyChanged]
     public class CodeFormatting
     {
-        public static int DefaultFontSize = 36;
+        public static int DefaultFontSize = 42;
 
         int? _FontSize = null;
         public int FontSize
@@ -49,23 +49,15 @@ namespace Braille
 
         public CodeFormatting()
         {
-            var notify = this as INotifyPropertyChanged;
-            if (notify != null)
+            (this as INotifyPropertyChanged).PropertyChanged += (s, e) => 
             {
-                notify.PropertyChanged += (s, e) => 
+                if (e.PropertyName == "FontSize")
                 {
-                    if (e.PropertyName == "FontSize")
-                    {
-                        Braille.FontSize = FontSize;
-                        Morse.FontSize = FontSize;
-                        Binary.FontSize = FontSize;
-                    }
-                };
-            }
-#if DEBUG
-            var debug = this as INotifyPropertyChanged;
-            if (debug != null) debug.PropertyChanged += (s, e) => { Debug.WriteLine("CodeFormatting." + e.PropertyName); };
-#endif
+                    Braille.FontSize = FontSize;
+                    Morse.FontSize = FontSize;
+                    Binary.FontSize = FontSize;
+                }
+            };
         }
     }
 }

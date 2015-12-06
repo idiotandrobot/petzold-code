@@ -28,34 +28,25 @@ namespace Braille
         
         public MorseFormatting()
         {
-            var notify = this as INotifyPropertyChanged;
-            if (notify != null)
+            (this as INotifyPropertyChanged).PropertyChanged += (s, e) =>
             {
-                notify.PropertyChanged += (s, e) =>
+                switch (e.PropertyName)
                 {
-                    switch (e.PropertyName)
-                    {
-                        case "FontSize":
-                            _Padding = null;
-                            _MorseScaleSize = null;
-                            _DotSize = null;
-                            _DashSize = null;
-                            _MorseScaleLocation = null;
-                            _SpaceWidth = null;
-                            break;
-                        case "Color":
-                            _Brush = null;
-                            break;
-                        default:
-                            break;
-                    }
-
-                };
-            }
-#if DEBUG
-            var debug = this as INotifyPropertyChanged;
-            if (debug != null) debug.PropertyChanged += (s, e) => { Debug.WriteLine("MorseFormatting." + e.PropertyName); };
-#endif
+                    case "FontSize":
+                        _Padding = null;
+                        _MorseScaleSize = null;
+                        _DotSize = null;
+                        _DashSize = null;
+                        _MorseScaleLocation = null;
+                        _SpaceWidth = null;
+                        break;
+                    case "Color":
+                        _Brush = null;
+                        break;
+                    default:
+                        break;
+                }
+            };
         }
 
         Brush _Brush;
