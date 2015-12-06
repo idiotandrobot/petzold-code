@@ -1,10 +1,8 @@
-﻿using Petzold.Code;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Text;
 
-namespace Braille
+namespace Petzold.Code
 {
     public static class CharExtensions
     {
