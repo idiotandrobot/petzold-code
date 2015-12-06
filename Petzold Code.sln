@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Braille", "source\Braille\Braille.csproj", "{2AE9A935-67CE-408C-BD67-9F351BF34B17}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Code", "source\Code\Code.csproj", "{2AE9A935-67CE-408C-BD67-9F351BF34B17}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Petzold.Code", "source\Petzold.Code\Petzold.Code.csproj", "{80FF4128-9E42-4CE4-B6AD-529E2A2DC01D}"
 EndProject

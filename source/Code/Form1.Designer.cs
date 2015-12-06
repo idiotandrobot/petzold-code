@@ -1,4 +1,4 @@
-﻿namespace Braille
+﻿namespace Code
 {
     partial class Form1
     {
@@ -31,7 +31,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.codePanel1 = new Braille.CodePanel();
+            this.codePanel1 = new Code.CodePanel();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 

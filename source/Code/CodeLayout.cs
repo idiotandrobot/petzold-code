@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Braille
+namespace Code
 {
     public class CodeLayout : IEnumerable<CodeCharLayout>
     {

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Braille.Properties {
+namespace Code.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

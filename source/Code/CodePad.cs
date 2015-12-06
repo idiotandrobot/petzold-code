@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Braille
+namespace Code
 {
     public class CodePad
     {

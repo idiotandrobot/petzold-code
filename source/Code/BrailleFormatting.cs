@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 
-namespace Braille
+namespace Code
 {
     [ImplementPropertyChanged]
     public class BrailleFormatting

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Braille
+namespace Code
 {
     public class CodeBox : PictureBox
     {

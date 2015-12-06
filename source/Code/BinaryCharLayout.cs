@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 
-namespace Braille
+namespace Code
 {
     public class BinaryCharLayout
     {

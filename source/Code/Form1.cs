@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Braille
+namespace Code
 {
     public partial class Form1 : Form
     {
