@@ -8,21 +8,36 @@ namespace Braille
     [ImplementPropertyChanged]
     public class BrailleFormatting
     {
-        public int FontSize { get; set; }
-        public Color Color { get; set; }
-        public bool ShowBlanks { get; set; }
 
-        public BrailleFormatting()
+        public static int DefaultFontSize = CodeFormatting.DefaultFontSize;
+
+        int? _FontSize = null;
+        public int FontSize
         {
+            get { return _FontSize ?? (FontSize = DefaultFontSize); }
+            set { _FontSize = value; }
+        }
 
+        public static Color DefaultColor = Color.RoyalBlue;
+
+        Color? _Color = null;
+        public Color Color
+        {
+            get { return _Color ?? (Color = DefaultColor); }
+            set { _Color = value; }
+        }
+
+        public static bool DefaultShowBlanks = true;
+
+        bool? _ShowBlanks = null;
+        public bool ShowBlanks
+        {
+            get { return _ShowBlanks ?? (ShowBlanks = DefaultShowBlanks); }
+            set { _ShowBlanks = value; }
         }
         
-        public BrailleFormatting(int fontSize, Color color, bool showBlanks)
+        public BrailleFormatting()
         {
-            FontSize = fontSize;
-            Color = color;
-            ShowBlanks = showBlanks;
-
             var notify = this as INotifyPropertyChanged;
             if (notify != null)
             {
@@ -30,8 +45,7 @@ namespace Braille
                 {
                     switch (e.PropertyName)
                     {
-                        case "FontSize":
-                            
+                        case "FontSize":                            
                             _BaseDotSize = null;
                             _Padding = null;                            
                             _Width = null;
@@ -59,7 +73,7 @@ namespace Braille
 #endif
         }
 
-        Brush _Brush = null;
+        Brush _Brush;
         public Brush Brush
         {
             get { return _Brush ?? (Brush = new SolidBrush(Color)); }
@@ -73,21 +87,21 @@ namespace Braille
             set { _BaseDotSize = value; }
         }
 
-        int? _Padding = null;
+        int? _Padding;
         public int Padding
         {
             get { return _Padding ?? (Padding = BaseDotSize / 2); }
             private set { _Padding = value; }
         }
 
-        int? _Width = null;
+        int? _Width;
         public int Width
         {
             get { return _Width ?? (Width = (FontSize * 2) + (Padding * 2)); }
             private set { _Width = value; }
         }
 
-        int? _Height = null;
+        int? _Height;
         public int Height
         {
             get { return _Height ?? (Height = (FontSize * 3) + (Padding * 2)); }
@@ -96,7 +110,7 @@ namespace Braille
         
         int DotScale = 2;
 
-        int? _dotSize = null;
+        int? _dotSize;
         int dotSize
         {
             get { return _dotSize ?? (dotSize = (int)(BaseDotSize / DotScale)); }

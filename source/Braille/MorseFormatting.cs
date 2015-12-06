@@ -8,16 +8,26 @@ namespace Braille
     [ImplementPropertyChanged]
     public class MorseFormatting
     {
-        public int FontSize { get; set; }
-        public Color Color { get; set; }
-
-        public MorseFormatting() { }
-
-        public MorseFormatting(int fontSize, Color color)
+        public static int DefaultFontSize = CodeFormatting.DefaultFontSize;
+        
+        int? _FontSize = null;
+        public int FontSize
         {
-            FontSize = fontSize;
-            Color = color;
+            get { return _FontSize ?? (FontSize = DefaultFontSize); }
+            set { _FontSize = value; }
+        }
 
+        public static Color DefaultColor = Color.Goldenrod;
+
+        Color? _Color = null;
+        public Color Color
+        {
+            get { return _Color ?? (Color = DefaultColor); }
+            set { _Color = value; }
+        }
+        
+        public MorseFormatting()
+        {
             var notify = this as INotifyPropertyChanged;
             if (notify != null)
             {
@@ -48,14 +58,14 @@ namespace Braille
 #endif
         }
 
-        Brush _Brush = null;
+        Brush _Brush;
         public Brush Brush
         {
             get { return _Brush ?? (Brush = new SolidBrush(Color)); }
             private set { _Brush = value; }
         }
 
-        int? _Padding = null;
+        int? _Padding;
         public int Padding
         {
             get { return _Padding ?? ((FontSize - 2) / 2); }
@@ -71,21 +81,21 @@ namespace Braille
             set { _MorseScaleSize = value; }
         }
 
-        Size? _DotSize = null;
+        Size? _DotSize;
         public Size DotSize
         {
             get { return _DotSize ?? (DotSize = new Size(MorseScaleSize, MorseScaleSize)); }
             private set { _DotSize = value; }
         }
 
-        Size? _DashSize = null;
+        Size? _DashSize;
         public Size DashSize
         {
             get { return _DashSize ?? (DashSize = new Size(MorseScaleSize * 2, MorseScaleSize / 2)); }
             private set { _DashSize = value; }
         }
 
-        int? _MorseScaleLocation = null;
+        int? _MorseScaleLocation;
         int MorseScaleLocation
         {
             get { return _MorseScaleLocation ?? (MorseScaleLocation = (int)(((FontSize - 2) - MorseScaleSize) / 2)); }
@@ -106,7 +116,7 @@ namespace Braille
                  y + Padding + MorseScaleLocation);
         }
 
-        int? _SpaceWidth = null;
+        int? _SpaceWidth;
         public int SpaceWidth
         {
             get { return _SpaceWidth ?? (SpaceWidth = MorseScaleSize / 2); }

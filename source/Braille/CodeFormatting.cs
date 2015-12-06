@@ -8,6 +8,24 @@ namespace Braille
     [ImplementPropertyChanged]
     public class CodeFormatting
     {
+        public static int DefaultFontSize = 36;
+
+        int? _FontSize = null;
+        public int FontSize
+        {
+            get { return _FontSize ?? (FontSize = DefaultFontSize); }
+            set { _FontSize = value; }
+        }
+
+        public static Color DefaultBackColor = Color.White;
+
+        Color? _BackColor = null;
+        public Color BackColor
+        {
+            get { return _BackColor ?? (BackColor = DefaultBackColor); }
+            set { _BackColor = value; }
+        }
+
         BrailleFormatting _Braille = null;
         public BrailleFormatting Braille
         {
@@ -29,26 +47,8 @@ namespace Braille
             set { _Binary = value; }
         }
 
-        public int FontSize { get; set; }
-        public Color BackColor { get; set; }
-
-        public CodeFormatting() {  }
-
-        public CodeFormatting(
-            int fontSize,
-            Color backColor,
-            Color brailleColor,
-            Color morseColor,
-            Color binaryColor,
-            bool showBlanks)
+        public CodeFormatting()
         {
-            FontSize = fontSize;
-            BackColor = backColor;
-
-            Braille = new BrailleFormatting(fontSize, brailleColor, showBlanks);
-            Morse = new MorseFormatting(fontSize, morseColor);
-            Binary = new BinaryFormatting("Courier New", fontSize, binaryColor);
-
             var notify = this as INotifyPropertyChanged;
             if (notify != null)
             {

@@ -61,16 +61,11 @@ namespace Braille
             Controls.Add(CodeBox);
 
             AutoScroll = true;
-            BackColor = Color.White;     
+            
 
-            Formatting = new CodeFormatting(
-                42,
-                BackColor,
-                Color.RoyalBlue,
-                Color.DarkGoldenrod,
-                Color.DarkCyan,
-                true);
+            Formatting = new CodeFormatting();
 
+            BackColor = Formatting.BackColor;
             CodeBox.Formatting = Formatting;
             CodeBox.Text = "CODE";
 
