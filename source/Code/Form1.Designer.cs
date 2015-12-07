@@ -42,8 +42,8 @@
             this.toolStripComboBox2 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripComboBox3 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripComboBox4 = new System.Windows.Forms.ToolStripComboBox();
-            this.codePanel1 = new Code.CodePanel();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
+            this.codePanel1 = new Code.CodePanel();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -127,7 +127,7 @@
             this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton4.Name = "toolStripButton4";
             this.toolStripButton4.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton4.Text = "Reset";
+            this.toolStripButton4.Text = "Reset Size";
             this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
             // 
             // toolStripSeparator2
@@ -139,25 +139,39 @@
             // 
             this.toolStripComboBox1.Name = "toolStripComboBox1";
             this.toolStripComboBox1.Size = new System.Drawing.Size(121, 25);
+            this.toolStripComboBox1.ToolTipText = "Back Color";
             this.toolStripComboBox1.TextChanged += new System.EventHandler(this.toolStripComboBox1_TextChanged);
             // 
             // toolStripComboBox2
             // 
             this.toolStripComboBox2.Name = "toolStripComboBox2";
             this.toolStripComboBox2.Size = new System.Drawing.Size(121, 25);
+            this.toolStripComboBox2.ToolTipText = "Braille Color";
             this.toolStripComboBox2.TextChanged += new System.EventHandler(this.toolStripComboBox2_TextChanged);
             // 
             // toolStripComboBox3
             // 
             this.toolStripComboBox3.Name = "toolStripComboBox3";
             this.toolStripComboBox3.Size = new System.Drawing.Size(121, 25);
+            this.toolStripComboBox3.ToolTipText = "Morse Color";
             this.toolStripComboBox3.TextChanged += new System.EventHandler(this.toolStripComboBox3_TextChanged);
             // 
             // toolStripComboBox4
             // 
             this.toolStripComboBox4.Name = "toolStripComboBox4";
             this.toolStripComboBox4.Size = new System.Drawing.Size(121, 25);
+            this.toolStripComboBox4.ToolTipText = "Binary Color";
             this.toolStripComboBox4.TextChanged += new System.EventHandler(this.toolStripComboBox4_TextChanged);
+            // 
+            // toolStripButton5
+            // 
+            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
+            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton5.Name = "toolStripButton5";
+            this.toolStripButton5.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton5.Text = "Reset Colors";
+            this.toolStripButton5.Click += new System.EventHandler(this.toolStripButton5_Click);
             // 
             // codePanel1
             // 
@@ -176,16 +190,6 @@
             this.codePanel1.ShowBlanks = true;
             this.codePanel1.Size = new System.Drawing.Size(718, 531);
             this.codePanel1.TabIndex = 3;
-            // 
-            // toolStripButton5
-            // 
-            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
-            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton5.Name = "toolStripButton5";
-            this.toolStripButton5.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton5.Text = "toolStripButton5";
-            this.toolStripButton5.Click += new System.EventHandler(this.toolStripButton5_Click);
             // 
             // Form1
             // 
