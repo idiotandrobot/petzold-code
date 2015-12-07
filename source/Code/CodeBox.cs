@@ -13,8 +13,7 @@ namespace Code
             set
             {
                 base.Text = value;
-                BackgroundImage = Pad.ToBitmap(Text);
-                Size = BackgroundImage.Size;
+                Redraw();
             }
         }
 
@@ -25,6 +24,12 @@ namespace Code
 
             DoubleBuffered = true;
             BackgroundImageLayout = ImageLayout.None;
+        }
+
+        public void Redraw()
+        {
+            BackgroundImage = Pad.ToBitmap(Text);
+            Size = BackgroundImage.Size;
         }
     }
 }

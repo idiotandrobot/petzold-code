@@ -79,6 +79,8 @@ namespace Code
                     case "MorseColor":
                     case "BinaryColor":
                     case "ShowBlanks":
+                        CodeBox.Redraw();
+                        break;
                     case "Text":
                         CodeBox.Text = Text;
                         break;
