@@ -20,17 +20,14 @@ namespace Code
 
             for (KnownColor i = KnownColor.AliceBlue; i < KnownColor.YellowGreen; i++)
             {
-                toolStripComboBox1.Items.Add(i);
                 toolStripComboBox2.Items.Add(i);
                 toolStripComboBox3.Items.Add(i);
                 toolStripComboBox4.Items.Add(i);
             }
 
-            toolStripComboBox1.SelectedItem = codePanel1.BackColor.ToKnownColor();
             toolStripComboBox2.SelectedItem = codePanel1.BrailleColor.ToKnownColor();
             toolStripComboBox3.SelectedItem = codePanel1.MorseColor.ToKnownColor();
             toolStripComboBox4.SelectedItem = codePanel1.BinaryColor.ToKnownColor();
-
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -54,15 +51,6 @@ namespace Code
         {
             codePanel1.FontSize -= 1;
             toolStripLabel1.Text = codePanel1.FontSize.ToString();
-        }
-
-        private void toolStripComboBox1_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                codePanel1.BackColor = Color.FromKnownColor((KnownColor)toolStripComboBox1.SelectedItem);
-            }
-            catch (Exception) { }
         }
 
         private void toolStripComboBox2_TextChanged(object sender, EventArgs e)
@@ -94,15 +82,26 @@ namespace Code
 
         private void toolStripButton5_Click(object sender, EventArgs e)
         {
-            codePanel1.BackColor = Color.White;
             codePanel1.BrailleColor = Color.RoyalBlue;
             codePanel1.MorseColor = Color.Goldenrod;
             codePanel1.BinaryColor = Color.DarkCyan;
 
-            toolStripComboBox1.SelectedItem = codePanel1.BackColor.ToKnownColor();
             toolStripComboBox2.SelectedItem = codePanel1.BrailleColor.ToKnownColor();
             toolStripComboBox3.SelectedItem = codePanel1.MorseColor.ToKnownColor();
             toolStripComboBox4.SelectedItem = codePanel1.BinaryColor.ToKnownColor();
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var result = saveFileDialog1.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    codePanel1.Save(saveFileDialog1.FileName);
+                }
+            }
+            catch (Exception ex) { MessageBox.Show(ex.ToString()); }            
         }
     }
 }
