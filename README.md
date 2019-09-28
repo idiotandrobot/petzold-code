@@ -1,4 +1,4 @@
-#Petzold Code
+# Petzold Code
 
 C# .NET Application that outputs the combination of Braille, Morse and Binary seen on the cover of [Code](http://charlespetzold.com/code/index.html) by [Charles Petzold](http://charlespetzold.com/).
 
