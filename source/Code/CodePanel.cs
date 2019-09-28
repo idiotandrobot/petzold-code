@@ -1,10 +1,8 @@
 ﻿using PropertyChanged;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
-using System.Windows.Forms;
-using System;
 using System.Drawing.Imaging;
+using System.Windows.Forms;
 
 namespace Code
 {
