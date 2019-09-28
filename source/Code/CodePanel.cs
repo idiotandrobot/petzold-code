@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace Code
 {
-    [ImplementPropertyChanged]
+    [AddINotifyPropertyChangedInterface]
     public class CodePanel : Panel
     {
         CodeFormatting Formatting;

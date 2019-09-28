@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace Code
 {
-    [ImplementPropertyChanged]
+    [AddINotifyPropertyChangedInterface]
     public class CodeFormatting
     {
         public static int DefaultFontSize = 42;

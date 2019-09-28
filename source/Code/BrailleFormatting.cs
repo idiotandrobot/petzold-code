@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace Code
 {
-    [ImplementPropertyChanged]
+    [AddINotifyPropertyChangedInterface]
     public class BrailleFormatting
     {
         public static int DefaultFontSize = CodeFormatting.DefaultFontSize;

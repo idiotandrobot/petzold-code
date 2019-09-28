@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace Code
 {
-    [ImplementPropertyChanged]
+    [AddINotifyPropertyChangedInterface]
     public class BinaryFormatting
     {
         public static string DefaultFontName = "Courier New";

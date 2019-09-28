@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace Code
 {
-    [ImplementPropertyChanged]
+    [AddINotifyPropertyChangedInterface]
     public class MorseFormatting
     {
         public static int DefaultFontSize = CodeFormatting.DefaultFontSize;
