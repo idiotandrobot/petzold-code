@@ -13,7 +13,7 @@ namespace Code
 
         public Bitmap Draw(CodeCharLayout charLayout)
         {
-            Bitmap bm = new Bitmap(Formatting.Braille.Width, Formatting.Braille.Height);
+            Bitmap bm = new(Formatting.Braille.Width, Formatting.Braille.Height);
             Graphics g = Graphics.FromImage(bm);
 
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;

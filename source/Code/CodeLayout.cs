@@ -10,7 +10,7 @@ namespace Code
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        List<CodeCharLayout> Layouts = new List<CodeCharLayout>();
+        private readonly List<CodeCharLayout> Layouts = new();
 
         public CodeLayout(
             string text,

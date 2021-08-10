@@ -9,7 +9,7 @@ namespace Code
 {
     public class BrailleCharLayout : IEnumerable<Tuple<bool, Rectangle>>
     {
-        List<Tuple<bool, Rectangle>> Sequence = new List<Tuple<bool, Rectangle>>();
+        private readonly List<Tuple<bool, Rectangle>> Sequence = new ();
 
         public BrailleCharLayout(BrailleChar brailleChar, BrailleFormatting formatting)
         {
@@ -39,14 +39,8 @@ namespace Code
             }
         }
 
-        public IEnumerator<Tuple<bool, Rectangle>> GetEnumerator()
-        {
-            return Sequence.AsEnumerable().GetEnumerator();
-        }
+        public IEnumerator<Tuple<bool, Rectangle>> GetEnumerator() => Sequence.AsEnumerable().GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return Sequence.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => Sequence.GetEnumerator();
     }
 }

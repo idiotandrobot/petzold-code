@@ -6,7 +6,7 @@ namespace Petzold.Code
 {
     public class BrailleChar : IEnumerable<bool>
     {
-        bool[] Sequence = { false, false, false, false, false, false, };
+        private readonly bool[] Sequence = { false, false, false, false, false, false, };
 
         public bool Dot1 { get { return Sequence[0]; } }
         public bool Dot2 { get { return Sequence[1]; } }

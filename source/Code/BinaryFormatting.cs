@@ -7,52 +7,52 @@ namespace Code
     [AddINotifyPropertyChangedInterface]
     public class BinaryFormatting
     {
-        public static string DefaultFontName = "Courier New";
+        public readonly static string DefaultFontName = "Courier New";
 
-        string _FontName = null;
+        private string _FontName = null;
         public string FontName
         {
-            get { return _FontName ?? (FontName = DefaultFontName); }
-            set { _FontName = value; }
+            get => _FontName ??= DefaultFontName; 
+            set => _FontName = value; 
         }
 
-        public static int DefaultFontSize = CodeFormatting.DefaultFontSize;
+        public readonly static int DefaultFontSize = CodeFormatting.DefaultFontSize;
 
-        int? _FontSize = null;
+        private int? _FontSize = null;
         public int FontSize
         {
-            get { return _FontSize ?? (FontSize = DefaultFontSize); }
-            set { _FontSize = value; }
+            get => _FontSize ??= DefaultFontSize; 
+            set => _FontSize = value; 
         }
 
-        public static Color DefaultColor = Color.DarkCyan;
+        public readonly static Color DefaultColor = Color.DarkCyan;
 
-        Color? _Color = null;
+        private Color? _Color = null;
         public Color Color
         {
-            get { return _Color ?? (Color = DefaultColor); }
-            set { _Color = value; }
+            get => _Color ??= DefaultColor; 
+            set => _Color = value; 
         }
 
-        int? _Padding;
+        private int? _Padding;
         public int Padding
         {
-            get { return _Padding ?? (Padding = (FontSize - 2) / 2); }
-            private set { _Padding = value; }
+            get => _Padding ??= (FontSize - 2) / 2; 
+            private set => _Padding = value; 
         }
 
-        Font _Font;
+        private Font _Font;
         public Font Font
         {
-            get { return _Font ?? (Font = new Font(FontName, FontSize / 3)); }
-            private set { _Font = value; }
+            get => _Font ??= new Font(FontName, FontSize / 3); 
+            private set => _Font = value; 
         }
 
-        Brush _Brush;
+        private Brush _Brush;
         public Brush Brush
         {
-            get { return _Brush ?? (Brush = new SolidBrush(Color)); }
-            private set { _Brush = value; }
+            get => _Brush ??= new SolidBrush(Color); 
+            private set => _Brush = value; 
         }
 
         public BinaryFormatting()

@@ -10,8 +10,7 @@ namespace Code
 
         public CodePad(CodeFormatting formatting)
         {
-            if (formatting == null) throw new ArgumentNullException("formatting");
-            Formatting = formatting;            
+            Formatting = formatting ?? throw new ArgumentNullException(nameof(formatting));            
             Pen = new CodeCharPen(formatting);
         }
 

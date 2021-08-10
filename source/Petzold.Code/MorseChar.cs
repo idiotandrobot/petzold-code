@@ -5,7 +5,7 @@ namespace Petzold.Code
 {
     public class MorseChar : IEnumerable<bool>
     {
-        List<bool> Sequence = new List<bool>();
+        private readonly List<bool> Sequence = new List<bool>();
 
         public bool? Signal1 { get { return Sequence.Count > 0 ? Sequence[0] as bool? : null; } }
         public bool? Signal2 { get { return Sequence.Count > 1 ? Sequence[1] as bool? : null; } }

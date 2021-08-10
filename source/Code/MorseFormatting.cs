@@ -7,22 +7,22 @@ namespace Code
     [AddINotifyPropertyChangedInterface]
     public class MorseFormatting
     {
-        public static int DefaultFontSize = CodeFormatting.DefaultFontSize;
-        
-        int? _FontSize = null;
+        public readonly static int DefaultFontSize = CodeFormatting.DefaultFontSize;
+
+        private int? _FontSize = null;
         public int FontSize
         {
-            get { return _FontSize ?? (FontSize = DefaultFontSize); }
-            set { _FontSize = value; }
+            get => _FontSize ??= DefaultFontSize; 
+            set => _FontSize = value; 
         }
 
-        public static Color DefaultColor = Color.Goldenrod;
+        public readonly static Color DefaultColor = Color.Goldenrod;
 
-        Color? _Color = null;
+        private Color? _Color = null;
         public Color Color
         {
-            get { return _Color ?? (Color = DefaultColor); }
-            set { _Color = value; }
+            get => _Color ??= DefaultColor; 
+            set => _Color = value; 
         }
         
         public MorseFormatting()
@@ -48,48 +48,36 @@ namespace Code
             };
         }
 
-        Brush _Brush;
+        private Brush _Brush;
         public Brush Brush
         {
-            get { return _Brush ?? (Brush = new SolidBrush(Color)); }
-            private set { _Brush = value; }
+            get => _Brush ??= new SolidBrush(Color); 
+            private set => _Brush = value; 
         }
 
-        int? _Padding;
-        public int Padding
+        private int? _Padding;
+        public int Padding => _Padding ??= (FontSize - 2) / 2; 
+
+        private readonly int MorseScale = 3;
+
+        private int? _MorseScaleSize;
+        private int MorseScaleSize
         {
-            get { return _Padding ?? ((FontSize - 2) / 2); }
-            private set { _Padding = value; }
+            get => _MorseScaleSize ??= (FontSize - 2) / MorseScale; 
+            set => _MorseScaleSize = value; 
         }
 
-        int MorseScale = 3;
+        private Size? _DotSize;
+        public Size DotSize => _DotSize ??= new(MorseScaleSize, MorseScaleSize); 
+        
+        private Size? _DashSize;
+        public Size DashSize => _DashSize ??= new Size(MorseScaleSize * 2, MorseScaleSize / 2); 
 
-        int? _MorseScaleSize;
-        int MorseScaleSize
-        {
-            get { return _MorseScaleSize ?? (MorseScaleSize = (int)((FontSize - 2) / MorseScale)); }
-            set { _MorseScaleSize = value; }
-        }
-
-        Size? _DotSize;
-        public Size DotSize
-        {
-            get { return _DotSize ?? (DotSize = new Size(MorseScaleSize, MorseScaleSize)); }
-            private set { _DotSize = value; }
-        }
-
-        Size? _DashSize;
-        public Size DashSize
-        {
-            get { return _DashSize ?? (DashSize = new Size(MorseScaleSize * 2, MorseScaleSize / 2)); }
-            private set { _DashSize = value; }
-        }
-
-        int? _MorseScaleLocation;
+        private int? _MorseScaleLocation;
         int MorseScaleLocation
         {
-            get { return _MorseScaleLocation ?? (MorseScaleLocation = (int)(((FontSize - 2) - MorseScaleSize) / 2)); }
-            set { _MorseScaleLocation = value; }
+            get => _MorseScaleLocation ??= ((FontSize - 2) - MorseScaleSize) / 2; 
+            set => _MorseScaleLocation = value; 
         }           
         
         public Point GetDashLocation(int x, int y, int sequenceWidth)
@@ -106,11 +94,7 @@ namespace Code
                  y + Padding + MorseScaleLocation);
         }
 
-        int? _SpaceWidth;
-        public int SpaceWidth
-        {
-            get { return _SpaceWidth ?? (SpaceWidth = MorseScaleSize / 2); }
-            private set { _SpaceWidth = value; }
-        }
+        private int? _SpaceWidth;
+        public int SpaceWidth => _SpaceWidth ??= MorseScaleSize / 2; 
     }
 }

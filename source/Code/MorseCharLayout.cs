@@ -9,7 +9,7 @@ namespace Code
 {
     public class MorseCharLayout : IEnumerable<Tuple<bool, Rectangle>>
     {
-        List<Tuple<bool, Rectangle>> Sequence = new List<Tuple<bool, Rectangle>>();
+        private readonly List<Tuple<bool, Rectangle>> Sequence = new();
 
         public MorseCharLayout(MorseChar morseChar, MorseFormatting formatting)
         {

@@ -19,8 +19,7 @@ namespace Code
 
         public CodeBox(CodePad pad)
         {
-            if (pad == null) throw new ArgumentNullException("pad");
-            Pad = pad;
+            Pad = pad ?? throw new ArgumentNullException(nameof(pad));
 
             DoubleBuffered = true;
             BackgroundImageLayout = ImageLayout.None;
